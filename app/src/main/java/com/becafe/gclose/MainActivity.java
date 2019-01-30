@@ -27,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
         btn_init= (Button) findViewById(R.id.btn_init);
         btn_reg= (Button) findViewById(R.id.btn_reg);
-        reg1 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_reg1, 10, 50);
-        reg2 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_reg2, 10, 50);
-        init1 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_init1, 10, 50);
-        init2 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_init2, 10, 50);
+        reg1 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_reg1, 5, 25);
+        reg2 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_reg2, 5, 25);
+        init1 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_init1, 5, 25);
+        init2 = decodeSampledBitmapFromResource(getResources(), R.drawable.btn_init2, 5, 25);
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
