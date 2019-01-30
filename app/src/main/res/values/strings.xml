@@ -2,4 +2,17 @@
     <string name="app_name">GClose</string>
     <string name="facebook_app_id">290226778355368</string>
     <string name="fb_login_protocol_scheme">fb290226778355368</string>
+    <string name="hint_nombre">Nombre</string>
+    <string name="hint_apellido">Apellido</string>
+    <string name="hint_fecha_nac">Fecha de nacimiento</string>
+    <string name="hint_sexo">Sexo</string>
+    <string name="hint_interes">Interés</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Contraseña</string>
+    
+    <string-array name="sexos">
+        <item>Femenino</item>
+        <item>Masculino</item>
+        <item>Indefinido</item>
+    </string-array>
 </resources>

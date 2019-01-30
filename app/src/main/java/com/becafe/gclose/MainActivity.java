@@ -1,5 +1,6 @@
 package com.becafe.gclose;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.becafe.gclose.R;
+import com.becafe.gclose.View.LoginActivity;
 
 import java.io.ByteArrayOutputStream;
 
@@ -23,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Llamo a la actividad login
+        Intent i = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(i);
 
 
         btn_init= (Button) findViewById(R.id.btn_init);

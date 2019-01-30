@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "792202373984-h3rt7afkro7ekpk2q9pfk2nc2767smd6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.becafe.gclose",
+            "certificate_hash": "8193b8646e91c6be25dae68683cb12da04f39067"
+          }
+        },
+        {
           "client_id": "792202373984-0j6i15duaq9g8b9i7edilj562rs3eru4.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "792202373984-0j6i15duaq9g8b9i7edilj562rs3eru4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "792202373984-4rfn3tv220vml8rcv1g4701liraf2vak.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.becafe.gclose"
+              }
+            }
+          ]
         },
         "ads_service": {
           "status": 2
