@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "792202373984",
+    "firebase_url": "https://gclose-c8d2d.firebaseio.com",
+    "project_id": "gclose-c8d2d",
+    "storage_bucket": "gclose-c8d2d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:792202373984:android:793d5826347edee3",
+        "android_client_info": {
+          "package_name": "com.becafe.gclose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "792202373984-0j6i15duaq9g8b9i7edilj562rs3eru4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJxD-NBifdr70zNu_lGNhrwQYD9OGNK90"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

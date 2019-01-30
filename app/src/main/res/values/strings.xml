@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GClose</string>
+    <string name="facebook_app_id">290226778355368</string>
+    <string name="fb_login_protocol_scheme">fb290226778355368</string>
+</resources>
