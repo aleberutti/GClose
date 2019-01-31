@@ -2,10 +2,13 @@ package com.becafe.gclose.View;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -29,6 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -43,10 +48,13 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     DatabaseReference bd;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        mAuth = FirebaseAuth.getInstance();
 
         EditUser = findViewById(R.id.EditUsername);
         EditPass = findViewById(R.id.EditPassword);
@@ -54,7 +62,6 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         FechaNac = findViewById(R.id.FechaNac);
         EditNombre = findViewById(R.id.EditNombre);
         EditApellido = findViewById(R.id.EditApellido);
-
 
         //Spinner Sexo
         Spinner_sexo = findViewById(R.id.Spinner_sexo);
@@ -64,13 +71,11 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         Spinner_sexo.setOnItemSelectedListener(this);
 
         //Spinner Interes
-        Spinner_sexo = findViewById(R.id.Spinner_interes);
+        Spinner_interes = findViewById(R.id.Spinner_interes);
         ArrayAdapter<CharSequence> adapterSpinner_interes = ArrayAdapter.createFromResource(this, R.array.sexos, android.R.layout.simple_spinner_item);
         adapterSpinner_interes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner_interes.setAdapter(adapterSpinner_interes);
         Spinner_interes.setOnItemSelectedListener(this);
-
-        mAuth = FirebaseAuth.getInstance();
 
         BtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,31 +135,21 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             return;
         }
 
+
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            bd = FirebaseDatabase.getInstance().getReference("usuarios");
-
-                            Usuario user = new Usuario();
-                            user.setApellido(EditApellido.getText().toString());
-                            user.setNombre(EditNombre.getText().toString());
-                            user.setFecha_nac(DateFormat.parse(FechaNac.getText().toString()));
-                            user.setSexo(Spinner_sexo.getSelectedItem().toString());
-
-                            //HAY QUE PARSER LA FECHA A DATE PARA GUARDARLA COMO OBJETO DATE
-
-                            String key = bd.push().getKey();
+                           // FirebaseUser user = mAuth.getCurrentUser();
 
 
 
-
-                            //Muestro un Toast de ingreso correcto
+                            //Muestro un Toast de registro correcto
                             Toast.makeText(RegisterActivity.this, "Registro correcto.",
                                     Toast.LENGTH_LONG).show();
 
@@ -162,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             startActivity(i);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                            Toast.makeText(RegisterActivity.this, "Fallo el registro.",
                                     Toast.LENGTH_LONG).show();
                         }
 

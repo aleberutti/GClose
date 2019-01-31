@@ -1,11 +1,11 @@
 package com.becafe.gclose.Model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Usuario {
 
-    String nombre, apellido, sexo, interes, idUsuario;
-    Date fecha_nac;
+    String nombre, apellido, sexo, interes, idUsuario, fecha_nac;
 
 
     public String getNombre() {
@@ -48,11 +48,11 @@ public class Usuario {
         this.idUsuario = idUsuario;
     }
 
-    public Date getFecha_nac() {
+    public String getFecha_nac() {
         return fecha_nac;
     }
 
-    public void setFecha_nac(Date fecha_nac) {
+    public void setFecha_nac(String fecha_nac) {
         this.fecha_nac = fecha_nac;
     }
 
