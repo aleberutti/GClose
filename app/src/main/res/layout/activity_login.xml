@@ -10,12 +10,15 @@ android:background="#303030">
 
 
     <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="350dp"
+        app:srcCompat="@drawable/logotest" />
+
 
     <EditText
         android:id="@+id/EditUsername"
@@ -24,10 +27,8 @@ android:background="#303030">
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="186dp"
-        android:hint="@string/hint_email"
-         />
+        android:layout_marginBottom="273dp"
+        android:hint="@string/hint_email" />
 
     <EditText
         android:id="@+id/EditPassword"
@@ -36,11 +37,9 @@ android:background="#303030">
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="126dp"
+        android:layout_marginBottom="212dp"
         android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/BtLogin"
@@ -48,10 +47,10 @@ android:background="#303030">
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="61dp"
+        android:layout_marginBottom="151dp"
         android:background="@drawable/gradient_1"
-        android:paddingTop="15dp"
         android:paddingBottom="15dp"
+        android:paddingTop="15dp"
         android:text="Ingresar"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
@@ -62,7 +61,7 @@ android:background="#303030">
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="123dp"
         android:text="@string/tvLogin"
         android:textColor="@android:color/white" />
 

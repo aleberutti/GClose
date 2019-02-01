@@ -37,12 +37,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        logo = findViewById(R.id.logo);
+        //logo = findViewById(R.id.logo);
 
-        ImageDecoder dec = new ImageDecoder();
-        Bitmap log = dec.decodeSampledBitmapFromResource(getResources(),R.drawable.gclose_logo, 250, 250);
+        //ImageDecoder dec = new ImageDecoder();
+        //Bitmap log = dec.decodeSampledBitmapFromResource(getResources(),R.drawable.logotest, 250, 250);
 
-        logo.setImageBitmap(log);
+        //logo.setImageBitmap(log);
 
         editUser = findViewById(R.id.EditUsername);
         editPass = findViewById(R.id.EditPassword);
