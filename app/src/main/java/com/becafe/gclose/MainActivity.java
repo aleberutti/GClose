@@ -17,9 +17,6 @@ import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn_reg;
-    private Button btn_init;
-    private Bitmap reg1, init1, reg2, init2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,4 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
 }
+
+

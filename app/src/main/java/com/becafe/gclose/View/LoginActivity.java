@@ -1,6 +1,7 @@
 package com.becafe.gclose.View;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,9 +9,11 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.becafe.gclose.Controller.ImageDecoder;
 import com.becafe.gclose.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,9 +25,10 @@ import com.becafe.gclose.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText EditUser, EditPass;
+    private EditText editUser, editPass;
     private Button btlogin;
     private TextView register;
+    private ImageView logo;
 
     private FirebaseAuth mAuth;
 
@@ -33,8 +37,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        EditUser = findViewById(R.id.EditUsername);
-        EditPass = findViewById(R.id.EditPassword);
+        logo = findViewById(R.id.logo);
+
+        ImageDecoder dec = new ImageDecoder();
+        Bitmap log = dec.decodeSampledBitmapFromResource(getResources(),R.drawable.gclose_logo, 250, 250);
+
+        logo.setImageBitmap(log);
+
+        editUser = findViewById(R.id.EditUsername);
+        editPass = findViewById(R.id.EditPassword);
         btlogin = findViewById(R.id.BtLogin);
         register = findViewById(R.id.registro);
 
@@ -60,30 +71,30 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginUser(){
 
-        String email = EditUser.getText().toString().trim();
-        String password = EditPass.getText().toString().trim();
+        String email = editUser.getText().toString().trim();
+        String password = editPass.getText().toString().trim();
 
         if(email.isEmpty()){
-            EditUser.setError("El correo es requerido");
-            EditUser.requestFocus();
+            editUser.setError("El correo es requerido");
+            editUser.requestFocus();
             return;
         }
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            EditUser.setError("El correo no es correcto");
-            EditUser.requestFocus();
+            editUser.setError("El correo no es correcto");
+            editUser.requestFocus();
             return;
         }
 
         if(password.isEmpty()){
-            EditPass.setError("La contraseña es requerida");
-            EditPass.requestFocus();
+            editPass.setError("La contraseña es requerida");
+            editPass.requestFocus();
             return;
         }
 
         if(password.length() < 6){
-            EditPass.setError("Se requiere 6 o más caracteres");
-            EditPass.requestFocus();
+            editPass.setError("Se requiere 6 o más caracteres");
+            editPass.requestFocus();
             return;
         }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GClose</string>
+    <string name="app_name">gClose</string>
     <string name="facebook_app_id">290226778355368</string>
     <string name="fb_login_protocol_scheme">fb290226778355368</string>
     <string name="hint_nombre">Nombre</string>
@@ -9,6 +9,8 @@
     <string name="hint_interes">Interés</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Contraseña</string>
+    <string name="tvLogin">No tienes cuenta ? Regístrate!</string>
+    <string name="registrar">Registrar</string>
     
     <string-array name="sexos">
         <item>Femenino</item>

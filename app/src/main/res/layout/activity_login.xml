@@ -8,71 +8,62 @@ tools:context=".View.LoginActivity"
 android:orientation="vertical"
 android:background="#303030">
 
-    <TextView
+
+    <ImageView
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="61dp"
-        android:fontFamily="@font/billabong"
-        android:text="gClose"
-        android:textColor="@android:color/white"
-        android:textSize="80dp"/>
+        android:layout_marginTop="20dp" />
 
     <EditText
         android:id="@+id/EditUsername"
-        android:layout_marginTop="25dp"
+        style="@style/editTextStyle"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:padding="16dp"
-        android:layout_marginBottom="300dp"
-        android:hint="Correo"
-        android:textColorHint="#ffffff"
-        android:textColor="#ffffff"
-        android:background="#55000000"
-        android:textSize="14sp"/>
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="186dp"
+        android:hint="@string/hint_email"
+         />
 
     <EditText
         android:id="@+id/EditPassword"
-        android:layout_marginTop="25dp"
+        style="@style/editTextStyle"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:padding="16dp"
-        android:textColor="#ffffff"
-        android:layout_marginBottom="240dp"
-        android:hint="Password"
-        android:textColorHint="#ffffff"
-        android:background="#55000000"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="126dp"
+        android:hint="@string/hint_password"
         android:inputType="textPassword"
-        android:textSize="14sp"/>
+        />
 
     <Button
         android:id="@+id/BtLogin"
-        android:layout_marginBottom="175dp"
         android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content"
+        android:layout_marginBottom="61dp"
         android:background="@drawable/gradient_1"
-        android:text="Ingresar"
-        android:textColor="@android:color/white"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:textAlignment="center"/>
+        android:text="Ingresar"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/registro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
-        android:text="No tienes cuenta ? Regístrate!"/>
+        android:layout_marginBottom="36dp"
+        android:text="@string/tvLogin"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>
