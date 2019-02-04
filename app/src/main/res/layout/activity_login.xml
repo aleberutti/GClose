@@ -51,17 +51,20 @@ android:background="#303030">
         android:background="@drawable/gradient_1"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
-        android:text="Ingresar"
+        android:text="@string/ingresar"
         android:textAlignment="center"
         android:textColor="@android:color/white" />
+
 
     <TextView
         android:id="@+id/registro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="123dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="91dp"
+        android:layout_marginBottom="120dp"
         android:text="@string/tvLogin"
         android:textColor="@android:color/white" />
 

@@ -20,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.becafe.gclose.Controller.DatePickerFragment;
+import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.Model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,8 +35,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
@@ -63,18 +66,20 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         EditNombre = findViewById(R.id.EditNombre);
         EditApellido = findViewById(R.id.EditApellido);
 
+        final ArrayList<String> spinnerData = new ArrayList<>();
+        spinnerData.add("Femenino");
+        spinnerData.add("Masculino");
+        spinnerData.add("Indefinido");
         //Spinner Sexo
         Spinner_sexo = findViewById(R.id.Spinner_sexo);
-        ArrayAdapter<CharSequence> adapterSpinner_sexo = ArrayAdapter.createFromResource(this, R.array.sexos, android.R.layout.simple_spinner_item);
-        adapterSpinner_sexo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpinnerAdapter adapterSpinner_sexo = new SpinnerAdapter(this, R.layout.spinner_layout, spinnerData);
+        //adapterSpinner_sexo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner_sexo.setAdapter(adapterSpinner_sexo);
         Spinner_sexo.setOnItemSelectedListener(this);
 
         //Spinner Interes
         Spinner_interes = findViewById(R.id.Spinner_interes);
-        ArrayAdapter<CharSequence> adapterSpinner_interes = ArrayAdapter.createFromResource(this, R.array.sexos, android.R.layout.simple_spinner_item);
-        adapterSpinner_interes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner_interes.setAdapter(adapterSpinner_interes);
+        Spinner_interes.setAdapter(adapterSpinner_sexo);
         Spinner_interes.setOnItemSelectedListener(this);
 
         BtRegister.setOnClickListener(new View.OnClickListener() {

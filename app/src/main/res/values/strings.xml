@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">gClose</string>
-    <string name="facebook_app_id">290226778355368</string>
-    <string name="fb_login_protocol_scheme">fb290226778355368</string>
     <string name="hint_nombre">Nombre</string>
     <string name="hint_apellido">Apellido</string>
     <string name="hint_fecha_nac">Fecha de nacimiento</string>
@@ -9,12 +7,17 @@
     <string name="hint_interes">Interés</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Contraseña</string>
-    <string name="tvLogin">No tienes cuenta ? Regístrate!</string>
+    <string name="tvLogin">No tienes cuenta ? <u>Regístrate!</u></string>
     <string name="registrar">Registrar</string>
-    
+    <string name="ingresar">Ingresar</string>
+
     <string-array name="sexos">
         <item>Femenino</item>
         <item>Masculino</item>
         <item>Indefinido</item>
     </string-array>
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_profile">Perfil</string>
+    <string name="title_getclose">Get Close</string>
+    <string name="title_crushes">Crushes</string>
 </resources>
