@@ -22,7 +22,10 @@
         </activity>
         <activity android:name=".View.LoginActivity" />
         <activity android:name=".View.RegisterActivity" />
-        <activity android:name=".View.IndexActivity"></activity>
+        <activity android:name=".View.IndexActivity" />
+        <activity
+            android:name=".View.NavigationActivity"
+            android:label="@string/title_activity_navigation"></activity>
     </application>
 
 </manifest>
