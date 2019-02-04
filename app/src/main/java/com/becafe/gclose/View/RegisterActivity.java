@@ -135,8 +135,6 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             return;
         }
 
-
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -145,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-                           // FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = mAuth.getCurrentUser();
 
 
 
