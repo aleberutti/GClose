@@ -48,9 +48,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     private FirebaseAuth mAuth;
 
-    DatabaseReference bd;
-
-
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +148,27 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            myRef = FirebaseDatabase.getInstance().getReference();
 
+
+                            EditUser = findViewById(R.id.EditUsername);
+                            EditPass = findViewById(R.id.EditPassword);
+                            BtRegister = findViewById(R.id.btRegistro);
+                            FechaNac = findViewById(R.id.FechaNac);
+                            EditNombre = findViewById(R.id.EditNombre);
+                            EditApellido = findViewById(R.id.EditApellido);
+
+                            Usuario usuario = new Usuario();
+                            usuario.setIdUsuario(user.getUid());
+                            usuario.setNombre(EditNombre.getText().toString());
+                            usuario.setApellido(EditApellido.getText().toString());
+                            usuario.setFecha_nac(FechaNac.getText().toString());
+                            usuario.setSexo(Spinner_sexo.getSelectedItem().toString());
+                            usuario.setInteres(Spinner_interes.getSelectedItem().toString());
+
+                            String id = myRef.push().getKey();
+
+                            myRef.child("usuarios").child(id).setValue(usuario);
 
                             //Muestro un Toast de registro correcto
                             Toast.makeText(RegisterActivity.this, "Registro correcto.",

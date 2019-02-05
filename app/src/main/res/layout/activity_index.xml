@@ -22,26 +22,17 @@ android:orientation="vertical">
             android:layout_marginTop="65dp"
             app:srcCompat="@drawable/logotest" />
 
+        <TextView
+            android:id="@+id/TextNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="91dp"
+            android:layout_marginBottom="120dp"
+            android:textColor="@android:color/white" />
+
     </LinearLayout>
-
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center">
-
-    <Button
-        android:id="@+id/btCerrarSesion"
-        android:layout_marginTop="20dp"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/buttonstylepink"
-        android:text="Cerrar Sesión"
-        android:textColor="#fff"
-        android:layout_gravity="center"
-        android:drawableRight="@drawable/ic_send_black_24dp"/>
-
-</LinearLayout>
 
 </LinearLayout>

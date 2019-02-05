@@ -7,6 +7,17 @@ public class Usuario {
 
     String nombre, apellido, sexo, interes, idUsuario, fecha_nac;
 
+    public Usuario() {
+    }
+
+    public Usuario(String nombre, String apellido, String sexo, String interes, String idUsuario, String fecha_nac) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.sexo = sexo;
+        this.interes = interes;
+        this.idUsuario = idUsuario;
+        this.fecha_nac = fecha_nac;
+    }
 
     public String getNombre() {
         return nombre;
