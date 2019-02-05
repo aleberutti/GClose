@@ -1,38 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".View.IndexActivity"
-android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.IndexActivity"
+    android:orientation="vertical"
+    android:background="#303030">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="350dp"
+        app:srcCompat="@drawable/logotest" />
+
+
+    <TextView
+        android:id="@+id/TextNombre"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:orientation="vertical"
-        android:padding="30dp">
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="273dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="147dp"
-            android:layout_height="145dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="65dp"
-            app:srcCompat="@drawable/logotest" />
+    <TextView
+        android:id="@+id/TextApellido"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="253dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/TextNombre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="91dp"
-            android:layout_marginBottom="120dp"
-            android:textColor="@android:color/white" />
+    <TextView
+        android:id="@+id/TextFechaNac"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="233dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/TextSexo"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="213dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/TextInteres"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="193dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/TextUsuario"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="173dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>
