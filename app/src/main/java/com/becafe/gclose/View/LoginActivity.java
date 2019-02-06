@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //Muestro un Toast de ingreso correcto
-                            Toast.makeText(LoginActivity.this, "Autenticación correcta.",
+                            Toast.makeText(LoginActivity.this, user.getUid(),
                                     Toast.LENGTH_LONG).show();
 
                             Intent i = new Intent(LoginActivity.this, IndexActivity.class);
