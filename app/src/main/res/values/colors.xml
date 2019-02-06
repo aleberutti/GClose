@@ -3,4 +3,5 @@
     <color name="colorPrimary">#303030</color>
     <color name="colorPrimaryDark">#303030</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="gclose_color">#02E073</color>
 </resources>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray">
+
+    <TextView
+        android:id="@+id/tvDescripcion"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/tvStyle"
+        android:text="@string/description"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:color/darker_gray" >
+
+            <TextView
+                android:id="@+id/tvStudies"
+                style="@style/tvStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_school_16dp"
+                android:drawablePadding="5dp"
+                android:text="@string/default_studies"/>
+
+            <TextView
+                android:id="@+id/tvWork"
+                style="@style/tvStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_business_16dp"
+                android:drawablePadding="5dp"
+                android:text="@string/default_work"/>
+
+            <TextView
+                android:id="@+id/tvCity"
+                style="@style/tvStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_location_16dp"
+                android:drawablePadding="5dp"
+                android:text="@string/default_location"/>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="357dp"
+                android:layout_height="2dp"
+                android:background="@drawable/gradient"
+                android:layout_marginTop="2dp"
+                />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/tvStyle"
+                android:text="@string/default_descripcion"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</LinearLayout>

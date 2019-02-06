@@ -10,6 +10,12 @@
     <string name="tvLogin">No tienes cuenta ? <u>Regístrate!</u></string>
     <string name="registrar">Registrar</string>
     <string name="ingresar">Ingresar</string>
+    <string name="description">DESCRIPCIÓN</string>
+    <string name="photos">FOTOS</string>
+    <string name="default_descripcion">Tu descripción</string>
+    <string name="default_location">Santa Fe - Argentina</string>
+    <string name="default_studies">UTN - FRSF</string>
+    <string name="default_work">Developer en i2T</string>
 
     <string-array name="sexos">
         <item>Femenino</item>
