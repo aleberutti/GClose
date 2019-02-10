@@ -25,7 +25,8 @@
         <activity android:name=".View.IndexActivity" />
         <activity
             android:name=".View.NavigationActivity"
-            android:label="@string/title_activity_navigation"></activity>
+            android:label="@string/title_activity_navigation" />
+        <activity android:name=".View.FullScreenPhotoActivity"></activity>
     </application>
 
 </manifest>

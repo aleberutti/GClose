@@ -1,9 +1,6 @@
 package com.becafe.gclose.View;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -22,6 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.becafe.gclose.R;
+
+import androidx.annotation.*;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -105,12 +105,15 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+                            String id = user.getUid();
 
                             //Muestro un Toast de ingreso correcto
-                            Toast.makeText(LoginActivity.this, user.getUid(),
+                            Toast.makeText(LoginActivity.this, id,
                                     Toast.LENGTH_LONG).show();
 
-                            Intent i = new Intent(LoginActivity.this, IndexActivity.class);
+                            Intent i = new Intent(LoginActivity.this, NavigationActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("USER_ID",  id);
                             startActivity(i);
 
                         } else {

@@ -3,16 +3,10 @@ package com.becafe.gclose.View;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.becafe.gclose.Controller.DatePickerFragment;
-import com.becafe.gclose.MainActivity;
+import com.becafe.gclose.Model.SpinnerAdapter;
 import com.becafe.gclose.Model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,14 +25,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.becafe.gclose.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.text.DateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+
+import androidx.annotation.*;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
@@ -49,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     private FirebaseAuth mAuth;
 
     DatabaseReference myRef;
+    StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +145,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             myRef = FirebaseDatabase.getInstance().getReference();
+                            storageRef = FirebaseStorage.getInstance().getReference();
 
 
                             EditUser = findViewById(R.id.EditUsername);
@@ -174,7 +171,12 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             Toast.makeText(RegisterActivity.this, "Registro correcto.",
                                     Toast.LENGTH_LONG).show();
 
-                            Intent i = new Intent(RegisterActivity.this, IndexActivity.class);
+                            //Creamos apartado del usuario en el storage
+                            storageRef.child(id).child("images");
+
+                            Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.putExtra("USER_ID", id);
                             startActivity(i);
                         } else {
                             // If sign in fails, display a message to the user.

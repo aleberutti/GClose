@@ -1,14 +1,13 @@
 package com.becafe.gclose;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-import com.becafe.gclose.R;
 import com.becafe.gclose.View.LoginActivity;
 
-import java.io.ByteArrayOutputStream;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
