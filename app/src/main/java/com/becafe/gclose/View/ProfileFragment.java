@@ -55,6 +55,7 @@ public class ProfileFragment extends Fragment {
         viewPager =(ViewPager) v.findViewById(R.id.vpProfile);
         adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
 
+
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
 

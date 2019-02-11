@@ -20,8 +20,6 @@
         android:layout_height="50dp"
         android:layout_below="@+id/portadaPhoto"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
         android:background="@drawable/gradient">
 
         <TextView
@@ -38,11 +36,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="283dp"
+        android:layout_below="@id/datosLayout"
         android:background="@drawable/gradient"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/gclose_color"
@@ -64,10 +58,8 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vpProfile"
         android:layout_width="match_parent"
-        android:layout_height="284dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="168dp" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tabLayout" />
 
 
 </RelativeLayout>
