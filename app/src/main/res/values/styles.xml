@@ -37,5 +37,13 @@
         <item name="android:fontFamily">@font/roboto</item>
         <item name="android:typeface">monospace</item>
     </style>
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/quantum_greyblack1000</item>
+        <item name="android:colorForeground">@color/quantum_white_text</item>
+        <item name="android:textColorAlertDialogListItem">#FFFF</item>
+        <item name="android:textColor">#FFFF</item>
+        <item name="android:colorPressedHighlight">#FFFF</item>
+        <item name="android:colorMultiSelectHighlight">#FFFF</item>
+    </style>
 
 </resources>

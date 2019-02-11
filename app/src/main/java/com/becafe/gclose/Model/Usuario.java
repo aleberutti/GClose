@@ -5,17 +5,16 @@ import java.util.Date;
 
 public class Usuario {
 
-    String nombre, apellido, sexo, interes, idUsuario, fecha_nac;
+    String nombre, apellido, sexo, interes, fecha_nac;
 
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, String sexo, String interes, String idUsuario, String fecha_nac) {
+    public Usuario(String nombre, String apellido, String sexo, String interes, String fecha_nac) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.sexo = sexo;
         this.interes = interes;
-        this.idUsuario = idUsuario;
         this.fecha_nac = fecha_nac;
     }
 
@@ -49,14 +48,6 @@ public class Usuario {
 
     public void setInteres(String interes) {
         this.interes = interes;
-    }
-
-    public String getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(String idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public String getFecha_nac() {

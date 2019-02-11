@@ -142,8 +142,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                         if (task.isSuccessful()) {
 
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-
+                            String id = task.getResult().getUser().getUid();
                             myRef = FirebaseDatabase.getInstance().getReference();
                             storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -156,14 +155,11 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             EditApellido = findViewById(R.id.EditApellido);
 
                             Usuario usuario = new Usuario();
-                            usuario.setIdUsuario(user.getUid());
                             usuario.setNombre(EditNombre.getText().toString());
                             usuario.setApellido(EditApellido.getText().toString());
                             usuario.setFecha_nac(FechaNac.getText().toString());
                             usuario.setSexo(Spinner_sexo.getSelectedItem().toString());
                             usuario.setInteres(Spinner_interes.getSelectedItem().toString());
-
-                            String id = myRef.push().getKey();
 
                             myRef.child("usuarios").child(id).setValue(usuario);
 

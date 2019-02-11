@@ -54,7 +54,7 @@ public class IndexActivity extends AppCompatActivity {
                 TextFechaNac.setText(user.getFecha_nac());
                 TextSexo.setText(user.getSexo());
                 TextInteres.setText(user.getInteres());
-                TextUsuario.setText(user.getIdUsuario());
+
             }
 
             @Override
