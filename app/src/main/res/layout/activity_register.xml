@@ -12,13 +12,13 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="500dp"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/billabong"
         android:text="@string/app_name"
         android:textColor="@android:color/white"
-        android:textSize="80sp"
-        android:layout_marginTop="5dp"/>
+        android:textSize="80sp"/>
 
     <EditText
         android:id="@+id/EditNombre"
@@ -28,30 +28,28 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="400dp"
+        android:layout_marginBottom="450dp"
         android:hint="@string/hint_nombre" />
 
     <EditText
         android:id="@+id/EditApellido"
         style="@style/editTextStyle"
-        android:layout_marginTop="25dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="395dp"
         android:layout_centerHorizontal="true"
-        android:hint="@string/hint_apellido"
-        android:layout_marginBottom="345dp"/>
+        android:hint="@string/hint_apellido"/>
 
     <EditText
         android:id="@+id/FechaNac"
         style="@style/editTextStyle"
-        android:layout_marginTop="25dp"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:hint="@string/hint_fecha_nac"
-        android:layout_marginBottom="290dp"
+        android:layout_marginBottom="340dp"
         android:inputType="date"/>
 
     <Spinner
@@ -60,8 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="235dp"
+        android:layout_marginBottom="295dp"
         android:background="#55000000"
         android:hint="@string/hint_sexo"
         android:popupBackground="#55000000"
