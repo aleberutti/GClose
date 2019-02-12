@@ -3,6 +3,7 @@ package com.becafe.gclose.Controller.Location;
 import android.content.Intent;
 import android.util.Log;
 
+import com.becafe.gclose.View.NavigationActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,19 +26,21 @@ public class TokenService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        /*mDatabase.child("users")
+        mDatabase.child("usuarios")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("messaging-token")
                 .setValue(token);
-    */
         Token=token;
     }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         JSONObject json = new JSONObject(remoteMessage.getData());
         try {
-            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
-            Intent asd = new Intent(getApplicationContext(), Ubicacion.class);
+//            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
+            Log.e("ZAFLLEGA NOTIFICACION", json.getString("message"));
+            // -------------------ACA HACER INTENT AL FRAGMENT DE GET CLOSE!!!!!!!!!!!!!! ------------------------------
+            Log.e("ZAFCONTEXT", getApplicationContext().getClass().getName());
+            Intent asd = new Intent(getApplicationContext(), NavigationActivity.class);
             asd.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             asd.putExtra("msj", json.getString("message"));
             startActivity(asd);
