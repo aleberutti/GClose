@@ -12,20 +12,18 @@ import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.Model.ViewPageAdapter;
 import com.becafe.gclose.R;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
-import androidx.annotation.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-
-import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class ProfileFragment extends Fragment {
 
@@ -38,6 +36,7 @@ public class ProfileFragment extends Fragment {
     private Usuario user;
 
     DatabaseReference myRef;
+    private FirebaseAuth mAuth;
     StorageReference storageRef;
 
     public ProfileFragment() {
@@ -59,10 +58,11 @@ public class ProfileFragment extends Fragment {
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
 
-        Bundle argumentos = getArguments();
-        if(argumentos != null)  user_id = argumentos.getString("USER_ID");
+//        Bundle argumentos = getArguments();
+//        if(argumentos != null)  user_id = argumentos.getString("USER_ID");
         myRef = FirebaseDatabase.getInstance().getReference("usuarios");
-        myRef.child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+        mAuth = FirebaseAuth.getInstance();
+        myRef.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "onCancelled", databaseError.toException());
+                Log.e("asd", "onCancelled", databaseError.toException());
             }
         });
 

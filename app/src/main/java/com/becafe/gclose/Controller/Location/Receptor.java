@@ -7,23 +7,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.becafe.gclose.View.NavigationActivity;
+
 import java.util.Calendar;
 
 public class Receptor extends BroadcastReceiver {
 
-    private Ubicacion u;
+    private NavigationActivity nav;
 
     public Receptor(){
 
     }
 
-    public Receptor(Ubicacion ubicacion){
-        u = ubicacion;
+    public Receptor(NavigationActivity n){
+        nav = n;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent in = new Intent(context, Ubicacion.class);
+        Intent in = new Intent(context, NavigationActivity.class);
         in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         in.putExtra("choosePlaces", false);
         context.startActivity(in);
