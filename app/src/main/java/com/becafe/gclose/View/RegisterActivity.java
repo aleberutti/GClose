@@ -83,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
+        FechaNac.setFocusable(false);
         FechaNac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
-        c.set(Calendar.MO, month);
+        c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = dayOfMonth + "/" + month+1 + "/" + year;
 
