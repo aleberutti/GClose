@@ -11,11 +11,19 @@
     <string name="registrar">Registrar</string>
     <string name="ingresar">Ingresar</string>
     <string name="description">DESCRIPCIÓN</string>
+    <string name="work">Trabajo:</string>
+    <string name="studies">Estudios:</string>
+    <string name="location">Ciudad:</string>
+    <string name="description1">Descripción:</string>
     <string name="photos">FOTOS</string>
     <string name="default_descripcion">Tu descripción</string>
     <string name="default_location">Santa Fe - Argentina</string>
     <string name="default_studies">UTN - FRSF</string>
     <string name="default_work">Developer en i2T</string>
+    <string name="btnCambiar">Cambiar foto de perfil</string>
+    <string name="cambiarPortada">Cambiar portada</string>
+    <string name="cambiarGaleria">Galería</string>
+
 
     <string-array name="sexos">
         <item>Femenino</item>

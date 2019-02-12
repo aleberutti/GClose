@@ -97,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
+        c.set(Calendar.MO, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = dayOfMonth + "/" + month+1 + "/" + year;
 

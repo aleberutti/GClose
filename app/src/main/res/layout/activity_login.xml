@@ -13,10 +13,8 @@ android:background="#303030">
         android:id="@+id/imageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="350dp"
         app:srcCompat="@drawable/logotest" />
 
 
@@ -25,9 +23,9 @@ android:background="#303030">
         style="@style/editTextStyle"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="273dp"
+        android:layout_marginTop="100dp"
+        android:layout_below="@id/imageView"
         android:hint="@string/hint_email" />
 
     <EditText
@@ -35,9 +33,9 @@ android:background="#303030">
         style="@style/editTextStyle"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="212dp"
+        android:layout_below="@id/EditUsername"
+        android:layout_marginTop="15dp"
         android:hint="@string/hint_password"
         android:inputType="textPassword" />
 
@@ -45,9 +43,9 @@ android:background="#303030">
         android:id="@+id/BtLogin"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="151dp"
+        android:layout_below="@id/EditPassword"
+        android:layout_marginTop="30dp"
         android:background="@drawable/gradient_1"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
@@ -61,10 +59,8 @@ android:background="#303030">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="91dp"
-        android:layout_marginBottom="120dp"
+        android:layout_below="@id/BtLogin"
+        android:layout_marginTop="15dp"
         android:text="@string/tvLogin"
         android:textColor="@android:color/white" />
 

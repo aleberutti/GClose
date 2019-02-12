@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.EditProfileActivity"
+    android:background="@color/colorPrimary">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvWork"
+            style="@style/tvStyle2"
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/work"/>
+
+        <EditText
+            android:id="@+id/EditWork"
+            style="@style/editTextStyle"
+            android:layout_below="@id/tvWork"
+            android:layout_width="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp" />
+        <TextView
+            android:id="@+id/tvStudies"
+            style="@style/tvStyle2"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/EditWork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/studies"/>
+
+        <EditText
+            android:id="@+id/EditStudies"
+            style="@style/editTextStyle"
+            android:layout_below="@id/tvStudies"
+            android:layout_width="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            style="@style/tvStyle2"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/EditStudies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/location"/>
+
+        <EditText
+            android:id="@+id/EditLocation"
+            style="@style/editTextStyle"
+            android:layout_below="@id/tvLocation"
+            android:layout_width="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp" />
+
+        <TextView
+            android:id="@+id/tvDesc"
+            style="@style/tvStyle2"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/EditLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description1"/>
+
+        <EditText
+            android:id="@+id/EditDesc"
+            style="@style/editTextStyle"
+            android:layout_below="@id/tvDesc"
+            android:layout_width="350dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="100dp"
+            android:layout_marginTop="15dp"/>
+        <View
+            android:id="@+id/divider2"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/EditDesc"
+            android:layout_width="357dp"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="15dp"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCambiarPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editTextStyle"
+            app:backgroundTint="@android:color/background_dark"
+            app:strokeColor="@android:color/darker_gray"
+            app:cornerRadius="10dp"
+            android:text="@string/btnCambiar"
+            android:layout_below="@id/divider2"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCambiarPortada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editTextStyle"
+            app:backgroundTint="@android:color/background_dark"
+            app:strokeColor="@android:color/darker_gray"
+            app:cornerRadius="10dp"
+            android:text="@string/cambiarPortada"
+            android:layout_below="@id/btnCambiarPerfil"
+            android:layout_marginTop="5dp"
+            android:textAlignment="center"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGaleria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editTextStyle"
+            app:backgroundTint="@android:color/background_dark"
+            app:strokeColor="@android:color/darker_gray"
+            app:cornerRadius="10dp"
+            android:text="@string/cambiarGaleria"
+            android:layout_below="@id/btnCambiarPortada"
+            android:layout_marginTop="5dp"
+            android:textAlignment="center"/>
+
+
+
+    </RelativeLayout>
+
+</ScrollView>
