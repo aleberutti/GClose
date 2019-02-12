@@ -24,6 +24,7 @@ import com.becafe.gclose.Model.SpinnerAdapter;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -166,10 +168,10 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             usuario.setFecha_nac(FechaNac.getText().toString());
                             usuario.setSexo(Spinner_sexo.getSelectedItem().toString());
                             usuario.setInteres(Spinner_interes.getSelectedItem().toString());
-                            usuario.setDescripcion("asd");
-                            usuario.setEducacion("asd");
-                            usuario.setTrabajo("asd");
-                            usuario.setLocalidad("asd");
+                            usuario.setDescripcion("");
+                            usuario.setEducacion("");
+                            usuario.setTrabajo("");
+                            usuario.setLocalidad("");
 
 
                             Log.e("ZAFID", String.valueOf(id));
@@ -182,12 +184,15 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             //Creamos apartado del usuario en el storage
                             Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile_pic);
                             Log.e("ZAFIMAGEURI", getImageUri(RegisterActivity.this, b).toString());
-                            storageRef.child(id).child("images").child("foto_perfil").child("default_pic").putFile(getImageUri(RegisterActivity.this, b));
-
-                            Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("USER_ID", id);
-                            startActivity(i);
+                            storageRef.child(id).child("images").child("foto_perfil").child("default_pic").putFile(getImageUri(RegisterActivity.this, b)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    i.putExtra("USER_ID", mAuth.getCurrentUser().getUid());
+                                    startActivity(i);
+                                }
+                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "Fallo el registro.",
@@ -212,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
     }
