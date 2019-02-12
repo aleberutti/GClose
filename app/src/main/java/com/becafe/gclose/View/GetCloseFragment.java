@@ -1,5 +1,8 @@
 package com.becafe.gclose.View;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -83,6 +86,23 @@ public class GetCloseFragment extends Fragment {
                                                         for (DataSnapshot child: dataSnapshot.getChildren()) {
                                                             if (child.getValue().toString().equals(mAuth.getCurrentUser().getUid())){
                                                                 // ITS A FUCKING MATCH
+                                                                Intent destino = new Intent(getContext(), ChatFragment.class);
+                                                                destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                                                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                createNotificationChannel();
+                                                                PendingIntent pendingIntent =
+                                                                        PendingIntent.getActivity(getContext(), 0, destino, 0);
+                                                                NotificationCompat.Builder mBuilder = new
+                                                                        NotificationCompat.Builder(getContext(), "2")
+                                                                        .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
+                                                                        .setContentTitle("♥ ♥ ♥ Parece que tienes una cita ! ! !")
+                                                                        .setContentText("Presiona aquí para comenzar una conversación")
+                                                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                                                        .setContentIntent(pendingIntent)
+                                                                        .setAutoCancel(true);
+                                                                NotificationManagerCompat notificationManager =
+                                                                        NotificationManagerCompat.from(getContext());
+                                                                notificationManager.notify(99, mBuilder.build());
                                                             }
                                                         }
                                                     }
@@ -122,5 +142,19 @@ public class GetCloseFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "User request";
+            String description = "New user in place";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+                    new NotificationChannel("2", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager =
+                    this.getContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

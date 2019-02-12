@@ -1,22 +1,37 @@
 package com.becafe.gclose.Controller.Location;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
+import com.becafe.gclose.Model.Usuario;
+import com.becafe.gclose.R;
 import com.becafe.gclose.View.NavigationActivity;
+import com.becafe.gclose.View.ProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 public class TokenService extends FirebaseMessagingService {
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private String llegaUid;
     public static String Token;
 
     public TokenService() {
@@ -34,18 +49,101 @@ public class TokenService extends FirebaseMessagingService {
     }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
         JSONObject json = new JSONObject(remoteMessage.getData());
         try {
 //            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
             Log.e("ZAFLLEGA NOTIFICACION", json.getString("message"));
+            llegaUid = json.getString("message");
+            Log.e("ZAFllegaUid", llegaUid);
             // -------------------ACA HACER INTENT AL FRAGMENT DE GET CLOSE!!!!!!!!!!!!!! ------------------------------
             Log.e("ZAFCONTEXT", getApplicationContext().getClass().getName());
-            Intent asd = new Intent(getApplicationContext(), NavigationActivity.class);
-            asd.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            asd.putExtra("msj", json.getString("message"));
-            startActivity(asd);
+            if (llegaUid.equals(mAuth.getCurrentUser().getUid())) {
+                // ABRIR FRAGMENT GET CLOSE
+                Intent asd = new Intent(getApplicationContext(), NavigationActivity.class);
+                asd.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                asd.putExtra("msj", json.getString("message"));
+                startActivity(asd);
+            }else{
+                mDatabase.child("usuarios").child("likes").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child: dataSnapshot.getChildren()) {
+                            if (child.getValue().toString().equals(llegaUid)){
+                                return ;
+                            }
+                        }
+                        mDatabase.child("usuarios").child("unlikes").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                    if (child.getValue().toString().equals(llegaUid)){
+                                        return ;
+                                    }
+                                }
+                                //SI LLEGA ACÁ QUIERE DECIR QUE NUNCA HA VISTO EL PERFIL QUE SE ACABA DE REGISTRAR AL LUGAR
+                                mDatabase.child("usuarios").child(llegaUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        dataSnapshot.getValue(Usuario.class);
+                                        //ENVIAR NOTIFICACIÓN DE QUE SE HA REGISTRADO UN NUEVO USUARIO
+                                        Intent destino = new Intent(getApplicationContext(), ProfileFragment.class);
+                                        destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                                Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        destino.putExtra("uid", llegaUid);
+                                        createNotificationChannel();
+                                        PendingIntent pendingIntent =
+                                                PendingIntent.getActivity(getApplicationContext(), 0, destino, 0);
+                                        NotificationCompat.Builder mBuilder = new
+                                                NotificationCompat.Builder(getApplicationContext(), "1")
+                                                .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
+                                                .setContentTitle("Nuevo usuario en el lugar")
+                                                .setContentText("Presiona aquí para ver su perfil")
+                                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                                .setContentIntent(pendingIntent)
+                                                .setAutoCancel(true);
+                                        NotificationManagerCompat notificationManager =
+                                        NotificationManagerCompat.from(getApplicationContext());
+                                        notificationManager.notify(99, mBuilder.build());
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "User request";
+            String description = "New user in place";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel =
+                    new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager =
+                    getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
