@@ -20,6 +20,7 @@
     <string name="default_location">Santa Fe - Argentina</string>
     <string name="default_studies">UTN - FRSF</string>
     <string name="default_work">Developer en i2T</string>
+    <string name="btnGuardarCambios">Guardar cambios</string>
     <string name="btnCambiar">Cambiar foto de perfil</string>
     <string name="cambiarPortada">Cambiar portada</string>
     <string name="cambiarGaleria">Galería</string>

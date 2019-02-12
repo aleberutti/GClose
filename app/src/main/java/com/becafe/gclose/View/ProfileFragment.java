@@ -1,6 +1,7 @@
 package com.becafe.gclose.View;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.Model.ViewPageAdapter;
 import com.becafe.gclose.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
@@ -41,7 +45,7 @@ public class ProfileFragment extends Fragment {
 
     DatabaseReference myRef;
     private FirebaseAuth mAuth;
-    StorageReference storageRef;
+    StorageReference storageRef, storageRefAux;
 
     public ProfileFragment() {
     }
@@ -59,14 +63,14 @@ public class ProfileFragment extends Fragment {
         btnFloating = (FloatingActionButton) v.findViewById(R.id.btnFloating);
         adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
 
-        btnFloating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
-                i.putExtra("USER_ID", user_id);
-                getActivity().startActivityForResult(i, EDIT_PROFILE);
-            }
-        });
+//        btnFloating.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
+//                i.putExtra("USER_ID", user_id);
+//                getActivity().startActivityForResult(i, EDIT_PROFILE);
+//            }
+//        });
 
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
@@ -94,7 +98,19 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
+        storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_perfil/default_pic");
+        final long ONE_MEGABYTE = 1024 * 1024;
+        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                perfil.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                System.out.println("FALLO");
+            }
+        });
 
         adapter.addFragment(descripFragmnet, "");
         adapter.addFragment(galleryFragment, "");

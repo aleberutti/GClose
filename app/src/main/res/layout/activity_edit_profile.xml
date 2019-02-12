@@ -80,10 +80,23 @@
             android:layout_centerHorizontal="true"
             android:layout_height="100dp"
             android:layout_marginTop="15dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGuardarCambios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/editTextStyle"
+            app:backgroundTint="@android:color/background_dark"
+            app:strokeColor="@android:color/darker_gray"
+            app:cornerRadius="10dp"
+            android:text="@string/btnGuardarCambios"
+            android:layout_below="@id/EditDesc"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"/>
         <View
             android:id="@+id/divider2"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/EditDesc"
+            android:layout_below="@id/btnGuardarCambios"
             android:layout_width="357dp"
             android:layout_height="2dp"
             android:background="@android:color/darker_gray"

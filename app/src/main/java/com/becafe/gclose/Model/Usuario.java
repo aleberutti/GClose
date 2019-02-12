@@ -1,21 +1,54 @@
 package com.becafe.gclose.Model;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 public class Usuario {
 
-    String nombre, apellido, sexo, interes, fecha_nac;
+    String nombre, apellido, sexo, interes, fecha_nac, descripcion, trabajo, localidad, educacion;
 
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, String sexo, String interes, String fecha_nac) {
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String desc) {
+        this.descripcion = desc;
+    }
+
+    public String getTrabajo() {
+        return trabajo;
+    }
+
+    public void setTrabajo(String trabajo) {
+        this.trabajo = trabajo;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
+    }
+
+    public String getEducacion() {
+        return educacion;
+    }
+
+    public void setEducacion(String educac) {
+        this.educacion = educac;
+    }
+
+    public Usuario(String nombre, String apellido, String sexo, String interes, String fecha_nac, String desc, String trabajo, String localidad, String educacion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.sexo = sexo;
         this.interes = interes;
         this.fecha_nac = fecha_nac;
+        this.descripcion = desc;
+        this.trabajo = trabajo;
+        this.localidad = localidad;
+        this.educacion = educacion;
     }
 
     public String getNombre() {

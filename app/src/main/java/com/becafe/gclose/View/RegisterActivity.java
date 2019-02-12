@@ -1,9 +1,15 @@
 package com.becafe.gclose.View;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,22 +22,22 @@ import android.widget.Toast;
 import com.becafe.gclose.Controller.DatePickerFragment;
 import com.becafe.gclose.Model.SpinnerAdapter;
 import com.becafe.gclose.Model.Usuario;
+import com.becafe.gclose.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import com.becafe.gclose.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import androidx.annotation.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -97,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.YEAR, year);
-        c.set(Calendar.MO, month);
+        c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currentDateString = dayOfMonth + "/" + month+1 + "/" + year;
 
@@ -160,7 +166,13 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             usuario.setFecha_nac(FechaNac.getText().toString());
                             usuario.setSexo(Spinner_sexo.getSelectedItem().toString());
                             usuario.setInteres(Spinner_interes.getSelectedItem().toString());
+                            usuario.setDescripcion("asd");
+                            usuario.setEducacion("asd");
+                            usuario.setTrabajo("asd");
+                            usuario.setLocalidad("asd");
 
+
+                            Log.e("ZAFID", String.valueOf(id));
                             myRef.child("usuarios").child(id).setValue(usuario);
 
                             //Muestro un Toast de registro correcto
@@ -168,7 +180,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                                     Toast.LENGTH_LONG).show();
 
                             //Creamos apartado del usuario en el storage
-                            storageRef.child(id).child("images");
+                            Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile_pic);
+                            Log.e("ZAFIMAGEURI", getImageUri(RegisterActivity.this, b).toString());
+                            storageRef.child(id).child("images").child("foto_perfil").child("default_pic").putFile(getImageUri(RegisterActivity.this, b));
 
                             Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -194,5 +208,12 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
+        return Uri.parse(path);
     }
 }
