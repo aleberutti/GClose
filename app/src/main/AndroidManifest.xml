@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +29,7 @@
         <activity
             android:name=".View.NavigationActivity"
             android:label="@string/title_activity_navigation" />
-        <activity android:name=".View.FullScreenPhotoActivity"></activity>
+        <activity android:name=".View.FullScreenPhotoActivity" />
 
         <receiver
             android:name=".Controller.Location.Receptor"
@@ -40,6 +41,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/mapClave" />
+
+        <activity android:name=".View.EditProfileActivity"></activity>
     </application>
 
 </manifest>

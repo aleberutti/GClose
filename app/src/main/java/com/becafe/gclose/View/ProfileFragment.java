@@ -1,5 +1,6 @@
 package com.becafe.gclose.View;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.Model.ViewPageAdapter;
 import com.becafe.gclose.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +38,8 @@ public class ProfileFragment extends Fragment {
     private ViewPageAdapter adapter;
     private String user_id;
     private Usuario user;
+    private FloatingActionButton btnFloating;
+    private static final int EDIT_PROFILE=1354;
 
     DatabaseReference myRef;
     StorageReference storageRef;
@@ -52,9 +56,18 @@ public class ProfileFragment extends Fragment {
         perfil = (ImageView) v.findViewById(R.id.profilePhoto);
         portada = (ImageView) v.findViewById(R.id.portadaPhoto);
         tabLayout= (TabLayout) v.findViewById(R.id.tabLayout);
-        viewPager =(ViewPager) v.findViewById(R.id.vpProfile);
+        viewPager = (ViewPager) v.findViewById(R.id.vpProfile);
+        btnFloating = (FloatingActionButton) v.findViewById(R.id.btnFloating);
         adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
 
+        btnFloating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
+                i.putExtra("USER_ID", user_id);
+                getActivity().startActivityForResult(i, EDIT_PROFILE);
+            }
+        });
 
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
@@ -87,6 +100,13 @@ public class ProfileFragment extends Fragment {
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_import_contacts_white_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_photo_library_white_24dp);
+
+        btnFloating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
 
 
