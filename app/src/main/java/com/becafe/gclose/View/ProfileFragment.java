@@ -71,6 +71,11 @@ public class ProfileFragment extends Fragment {
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
 
+        if (getArguments().getString("uid")!=null){
+            //MOSTRAR PERFIL CON EL UID QUE LLEGA, PERMITIR PONER LIKE/UNLIKE Y TERMINAR EL ONCREATE CON return;
+            return v;
+        }
+
 //        Bundle argumentos = getArguments();
 //        if(argumentos != null)  user_id = argumentos.getString("USER_ID");
         myRef = FirebaseDatabase.getInstance().getReference("usuarios");
