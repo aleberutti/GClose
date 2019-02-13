@@ -50,32 +50,32 @@ public class TokenService extends FirebaseMessagingService {
     }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        System.out.println("FAUSTO" + Token.toString());
-        System.out.println("FAUSTO2" + remoteMessage.toString());
-        if (remoteMessage.getFrom()==Token){
-            Intent destino = new Intent(getBaseContext(), MainActivity.class);
-            destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            createNotificationChannel();
-            PendingIntent pendingIntent =
-                    PendingIntent.getActivity(getBaseContext(), 0, destino, 0);
-            NotificationCompat.Builder mBuilder = new
-                    NotificationCompat.Builder(getBaseContext(), "2")
-                    .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
-                    .setContentTitle("♥ ♥ ♥ Parece que tienes una cita ! ! !")
-                    .setContentText("Presiona aquí para comenzar una conversación")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
-            NotificationManagerCompat notificationManager =
-                    NotificationManagerCompat.from(getBaseContext());
-            notificationManager.notify(99, mBuilder.build());
-        }else {
-            mDatabase = FirebaseDatabase.getInstance().getReference();
-            mAuth = FirebaseAuth.getInstance();
-            JSONObject json = new JSONObject(remoteMessage.getData());
-            try {
-//            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
+        JSONObject json = new JSONObject(remoteMessage.getData());
+        try {
+            Log.e("FAUSTO2", json.getString("is-match"));
+            Log.e("FAUSTO2", json.getString("message"));
+            if (json.getString("is-match")==null){
+                Intent destino = new Intent(getBaseContext(), MainActivity.class);
+                destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                createNotificationChannel();
+                PendingIntent pendingIntent =
+                        PendingIntent.getActivity(getBaseContext(), 0, destino, 0);
+                NotificationCompat.Builder mBuilder = new
+                        NotificationCompat.Builder(getBaseContext(), "2")
+                        .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
+                        .setContentTitle("♥ ♥ ♥ Parece que tienes una cita ! ! !")
+                        .setContentText("Presiona aquí para comenzar una conversación")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true);
+                NotificationManagerCompat notificationManager =
+                        NotificationManagerCompat.from(getBaseContext());
+                notificationManager.notify(99, mBuilder.build());
+            }else {
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                mAuth = FirebaseAuth.getInstance();
+                //            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
                 Log.e("ZAFLLEGA NOTIFICACION", json.getString("message"));
                 llegaUid = json.getString("message");
                 Log.e("ZAFllegaUid", llegaUid);
@@ -150,9 +150,9 @@ public class TokenService extends FirebaseMessagingService {
                         }
                     });
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
