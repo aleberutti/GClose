@@ -371,6 +371,7 @@ public class NavigationActivity extends AppCompatActivity {
 
             dataobjData = new JSONObject();
             dataobjData.put("message", mAuth.getCurrentUser().getUid());
+            dataobjData.put("is-match", "false");
 
 
             objData.put("content_available","true");
