@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.R;
 import com.becafe.gclose.View.NavigationActivity;
@@ -50,25 +49,25 @@ public class TokenService extends FirebaseMessagingService {
     }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (remoteMessage.getTo().equals(Token)){
-            Intent destino = new Intent(getBaseContext(), MainActivity.class);
-            destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            createNotificationChannel();
-            PendingIntent pendingIntent =
-                    PendingIntent.getActivity(getBaseContext(), 0, destino, 0);
-            NotificationCompat.Builder mBuilder = new
-                    NotificationCompat.Builder(getBaseContext(), "2")
-                    .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
-                    .setContentTitle("♥ ♥ ♥ Parece que tienes una cita ! ! !")
-                    .setContentText("Presiona aquí para comenzar una conversación")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
-            NotificationManagerCompat notificationManager =
-                    NotificationManagerCompat.from(getBaseContext());
-            notificationManager.notify(99, mBuilder.build());
-        }else {
+//        if (remoteMessage.getTo().equals(Token)){
+//            Intent destino = new Intent(getBaseContext(), MainActivity.class);
+//            destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+//                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            createNotificationChannel();
+//            PendingIntent pendingIntent =
+//                    PendingIntent.getActivity(getBaseContext(), 0, destino, 0);
+//            NotificationCompat.Builder mBuilder = new
+//                    NotificationCompat.Builder(getBaseContext(), "2")
+//                    .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
+//                    .setContentTitle("♥ ♥ ♥ Parece que tienes una cita ! ! !")
+//                    .setContentText("Presiona aquí para comenzar una conversación")
+//                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                    .setContentIntent(pendingIntent)
+//                    .setAutoCancel(true);
+//            NotificationManagerCompat notificationManager =
+//                    NotificationManagerCompat.from(getBaseContext());
+//            notificationManager.notify(99, mBuilder.build());
+//        }else {
             mDatabase = FirebaseDatabase.getInstance().getReference();
             mAuth = FirebaseAuth.getInstance();
             JSONObject json = new JSONObject(remoteMessage.getData());
@@ -151,7 +150,7 @@ public class TokenService extends FirebaseMessagingService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
+//        }
     }
 
     private void createNotificationChannel() {
