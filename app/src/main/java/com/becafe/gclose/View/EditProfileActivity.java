@@ -35,8 +35,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private MaterialButton btnPerfil, btnPortada, btnGaleria, btnGuardarCambios;
     private static final int GALLERY_INTENT=1;
     private static final int GALLERY_INTENT_PERFIL=2;
-    private static final int CROP_IMAGE=3;
+    private static final int REQUEST_CODE_CROP_IMAGE=3;
     private static final int CAMERA=4;
+
 
     private FirebaseAuth mAuth;
 
@@ -60,17 +61,19 @@ public class EditProfileActivity extends AppCompatActivity {
         desc = findViewById(R.id.EditDesc);
 
         Bundle b = getIntent().getExtras();
-        if (b.getString("educacion")!=null) {
-            studies.setText(b.getString("educacion"));
-        }
-        if (b.getString("trabajo")!=null) {
-            work.setText(b.getString("trabajo"));
-        }
-        if(b.getString("localidad")!=null) {
-            location.setText(b.getString("localidad"));
-        }
-        if (b.getString("descripcion")!=null) {
-            desc.setText(b.getString("descripcion"));
+        if (b!=null){
+            if (b.getString("educacion")!=null) {
+                studies.setText(b.getString("educacion"));
+            }
+            if (b.getString("trabajo")!=null) {
+                work.setText(b.getString("trabajo"));
+            }
+            if(b.getString("localidad")!=null) {
+                location.setText(b.getString("localidad"));
+            }
+            if (b.getString("descripcion")!=null) {
+                desc.setText(b.getString("descripcion"));
+            }
         }
 
         btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
@@ -200,5 +203,6 @@ public class EditProfileActivity extends AppCompatActivity {
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
     }
+
 
 }
