@@ -22,11 +22,6 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MainActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
-    private TextView mLoadingText;
-
-    private int mProgressStatus = 0;
-
-    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

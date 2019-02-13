@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -16,7 +17,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.becafe.gclose.Controller.DatePickerFragment;
@@ -28,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -48,11 +53,16 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     private EditText EditUser, EditPass, EditNombre, EditApellido, FechaNac;
     private Button BtRegister;
     Spinner Spinner_sexo, Spinner_interes;
+    private TextView logo;
+    private ImageView  imageView;
+    private ProgressBar mProgressBar;
 
     private FirebaseAuth mAuth;
 
     private DatabaseReference myRef;
     private StorageReference storageRef;
+
+    private String email, password, idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +71,18 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
         mAuth = FirebaseAuth.getInstance();
 
+        logo = findViewById(R.id.logo);
+        imageView = findViewById(R.id.imageView);
+
+        mProgressBar = findViewById(R.id.progressbar);
+
         EditUser = findViewById(R.id.EditUsername);
         EditPass = findViewById(R.id.EditPassword);
         BtRegister = findViewById(R.id.btRegistro);
         FechaNac = findViewById(R.id.FechaNac);
         EditNombre = findViewById(R.id.EditNombre);
         EditApellido = findViewById(R.id.EditApellido);
+        FechaNac.setFocusable(false);
 
         final ArrayList<String> spinnerData = new ArrayList<>();
         spinnerData.add("Femenino");
@@ -115,8 +131,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     public void registerUser(){
 
-        String email = EditUser.getText().toString().trim();
-        String password = EditPass.getText().toString().trim();
+        email = EditUser.getText().toString().trim();
+        password = EditPass.getText().toString().trim();
 
         if(email.isEmpty()){
             EditUser.setError("El correo es requerido");
@@ -142,6 +158,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
             return;
         }
 
+        //LLAMO AL PROGRESS BAR PARA EL NUEVO INTENT
+//
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -149,18 +168,17 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
+
+
                             // Sign in success, update UI with the signed-in user's information
                             String id = task.getResult().getUser().getUid();
+
+                            //PARA MANEJAR EL PROGRESSBAR
+                            idUser = id;
+
                             myRef = FirebaseDatabase.getInstance().getReference();
                             storageRef = FirebaseStorage.getInstance().getReference();
 
-
-                            EditUser = findViewById(R.id.EditUsername);
-                            EditPass = findViewById(R.id.EditPassword);
-                            BtRegister = findViewById(R.id.btRegistro);
-                            FechaNac = findViewById(R.id.FechaNac);
-                            EditNombre = findViewById(R.id.EditNombre);
-                            EditApellido = findViewById(R.id.EditApellido);
 
                             Usuario usuario = new Usuario();
                             usuario.setNombre(EditNombre.getText().toString());
@@ -174,27 +192,16 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             usuario.setLocalidad("");
 
 
-                            Log.e("ZAFID", String.valueOf(id));
                             myRef.child("usuarios").child(id).setValue(usuario);
 
                             //Muestro un Toast de registro correcto
                             Toast.makeText(RegisterActivity.this, "Registro correcto.",
                                     Toast.LENGTH_LONG).show();
 
-                            //Creamos apartado del usuario en el storage
-                            Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile_pic);
-                            Log.e("ZAFIMAGEURI", getImageUri(RegisterActivity.this, b).toString());
-                            TokenService.Token = FirebaseInstanceId.getInstance().getToken();
-                            myRef.child("usuarios").child(id).child("messaging-token").setValue(TokenService.Token);
-//                            storageRef.child(id).child("images").child("foto_perfil").child("default_pic").putFile(getImageUri(RegisterActivity.this, b)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    i.putExtra("USER_ID", mAuth.getCurrentUser().getUid());
-                                    startActivity(i);
-//                                }
-//                            });
+                            //LLAMO AL PROGRESSBAR
+                            new MyTask().execute();
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "Fallo el registro.",
@@ -204,6 +211,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                         // ...
                     }
                 });
+
 
     }
 
@@ -223,4 +231,78 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
     }
+
+
+    class MyTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            mProgressBar.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+
+            logo.setVisibility(View.INVISIBLE);
+            EditUser.setVisibility(View.INVISIBLE);
+            EditPass.setVisibility(View.INVISIBLE);
+            BtRegister.setVisibility(View.INVISIBLE);
+            FechaNac.setVisibility(View.INVISIBLE);
+            EditNombre.setVisibility(View.INVISIBLE);
+            EditApellido.setVisibility(View.INVISIBLE);
+            FechaNac.setVisibility(View.INVISIBLE);
+            Spinner_interes.setVisibility(View.INVISIBLE);
+            Spinner_sexo.setVisibility(View.INVISIBLE);
+
+            //Toast.makeText(getApplicationContext(), "Pongo visible", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            for (int i=0; i<=12; i++){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                publishProgress(i);
+            }
+
+            return "Fin";
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            mProgressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Toast.makeText(getApplicationContext(), "Bienvenido", Toast.LENGTH_LONG).show();
+
+            callActivity();
+
+        }
+    }
+
+    public void callActivity(){
+
+        //Creamos apartado del usuario en el storage
+        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile_pic);
+        TokenService.Token = FirebaseInstanceId.getInstance().getToken();
+        myRef.child("usuarios").child(idUser).child("messaging-token").setValue(TokenService.Token);
+
+        Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("USER_ID", mAuth.getCurrentUser().getUid());
+        startActivity(i);
+
+    }
+
+
 }
