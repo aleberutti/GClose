@@ -60,19 +60,19 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         EditNombre = findViewById(R.id.EditNombre);
         EditApellido = findViewById(R.id.EditApellido);
 
-        final ArrayList<String> spinnerData = new ArrayList<>();
-        spinnerData.add("Femenino");
-        spinnerData.add("Masculino");
-        spinnerData.add("Indefinido");
-        //Spinner Sexo
+
+
         Spinner_sexo = findViewById(R.id.Spinner_sexo);
-        SpinnerAdapter adapterSpinner_sexo = new SpinnerAdapter(this, R.layout.spinner_layout, spinnerData);
-        //adapterSpinner_sexo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner_interes = findViewById(R.id.Spinner_interes);
+
+        //Adapter para ambos
+        SpinnerAdapter adapterSpinner_sexo = new SpinnerAdapter(this, R.layout.spinner_layout, listSex());
+
+        //Spinner Sexo
         Spinner_sexo.setAdapter(adapterSpinner_sexo);
         Spinner_sexo.setOnItemSelectedListener(this);
 
         //Spinner Interes
-        Spinner_interes = findViewById(R.id.Spinner_interes);
         Spinner_interes.setAdapter(adapterSpinner_sexo);
         Spinner_interes.setOnItemSelectedListener(this);
 
@@ -195,5 +195,13 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public ArrayList<String> listSex(){
+        final ArrayList<String> data = new ArrayList<>();
+        data.add("Femenino");
+        data.add("Masculino");
+        data.add("Indefinido");
+        return data;
     }
 }

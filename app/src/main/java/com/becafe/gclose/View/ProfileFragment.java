@@ -59,22 +59,18 @@ public class ProfileFragment extends Fragment {
         btnFloating = (FloatingActionButton) v.findViewById(R.id.btnFloating);
         adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
 
-        btnFloating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
-                i.putExtra("USER_ID", user_id);
-                getActivity().startActivityForResult(i, EDIT_PROFILE);
-            }
-        });
+//        btnFloating.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
+//                i.putExtra("USER_ID", user_id);
+//                getActivity().startActivityForResult(i, EDIT_PROFILE);
+//            }
+//        });
 
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
 
-        if (getArguments().getString("uid")!=null){
-            //MOSTRAR PERFIL CON EL UID QUE LLEGA, PERMITIR PONER LIKE/UNLIKE Y TERMINAR EL ONCREATE CON return;
-            return v;
-        }
 
 //        Bundle argumentos = getArguments();
 //        if(argumentos != null)  user_id = argumentos.getString("USER_ID");

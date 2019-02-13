@@ -3,6 +3,7 @@ package com.becafe.gclose.View;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -82,14 +83,20 @@ public class NavigationActivity extends AppCompatActivity {
                     tag="profileFragment";
                     selectedFragment=getSupportFragmentManager().findFragmentByTag(tag);
                     if(selectedFragment==null)selectedFragment = new ProfileFragment();
-                    return true;
+                    break;
                 case R.id.navigation_get_close:
-//                    tag="getCloseFragment";
-//                    selectedFragment=getSupportFragmentManager().findFragmentByTag(tag);
-//                    if(selectedFragment==null)selectedFragment = new GetCloseFragment();
-                    return true;
+
+                    Intent i = new Intent(NavigationActivity.this, RecyclerViewActivity.class);
+                    startActivity(i);
+
+
+                    tag="getCloseFragment";
+                    selectedFragment=getSupportFragmentManager().findFragmentByTag(tag);
+                    if(selectedFragment==null)selectedFragment = new GetCloseFragment();
+
+                    break;
                 case R.id.navigation_crushes:
-                    return true;
+                    break;
             }
 
             getSupportFragmentManager()
