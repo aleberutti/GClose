@@ -7,24 +7,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.becafe.gclose.Controller.Location.TokenService;
 import com.becafe.gclose.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,16 +44,10 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private boolean flagPerfil;
 
-    private ProgressBar mProgressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
-        //PROGRESSBAR
-        mProgressBar = findViewById(R.id.progressbar);
-        mProgressBar.setVisibility(View.INVISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference();
@@ -116,10 +105,10 @@ public class EditProfileActivity extends AppCompatActivity {
                         .setPositiveButton("Galería", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-                                //LLAMO AL PROGRESS BAR PARA EL NUEVO INTENT
-                                new MyTask().execute();
-
+                                Intent i = new Intent(Intent.ACTION_PICK);
+                                i.setType("image/*");
+                                flagPerfil = true;
+                                startActivityForResult(i, GALLERY_INTENT);
                             }
                         })
                         .setNeutralButton("Cámara", new DialogInterface.OnClickListener() {
@@ -212,65 +201,6 @@ public class EditProfileActivity extends AppCompatActivity {
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
-    }
-
-
-    class MyTask extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-//            mProgressBar.setVisibility(View.VISIBLE);
-//            editUser.setVisibility(View.INVISIBLE);
-//            editPass.setVisibility(View.INVISIBLE);
-//            register.setVisibility(View.INVISIBLE);
-//            btlogin.setVisibility(View.INVISIBLE);
-
-            Toast.makeText(getApplicationContext(), "Pongo visible", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            Toast.makeText(getApplicationContext(), "DO IN", Toast.LENGTH_LONG).show();
-
-//            for (int i=0; i<=15; i++){
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                publishProgress(i);
-//            }
-
-            Intent i = new Intent(Intent.ACTION_PICK);
-            i.setType("image/*");
-            flagPerfil = true;
-            startActivityForResult(i, GALLERY_INTENT);
-
-            return "Fin";
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-
-            mProgressBar.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-
-
-            Toast.makeText(getApplicationContext(), "Termina", Toast.LENGTH_LONG).show();
-
-
-
-        }
     }
 
 }

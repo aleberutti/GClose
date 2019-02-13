@@ -11,9 +11,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/iconotest"
+        android:icon="@mipmap/logotest1"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/iconotest"
+        android:roundIcon="@mipmap/logotest1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".View.RecyclerViewActivity"></activity>
