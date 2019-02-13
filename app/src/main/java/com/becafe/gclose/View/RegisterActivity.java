@@ -20,28 +20,26 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.becafe.gclose.Controller.DatePickerFragment;
+import com.becafe.gclose.Controller.Location.TokenService;
 import com.becafe.gclose.Model.SpinnerAdapter;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import com.becafe.gclose.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import androidx.annotation.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -186,15 +184,17 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
                             //Creamos apartado del usuario en el storage
                             Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile_pic);
                             Log.e("ZAFIMAGEURI", getImageUri(RegisterActivity.this, b).toString());
-                            storageRef.child(id).child("images").child("foto_perfil").child("default_pic").putFile(getImageUri(RegisterActivity.this, b)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            TokenService.Token = FirebaseInstanceId.getInstance().getToken();
+                            myRef.child("usuarios").child(id).child("messaging-token").setValue(TokenService.Token);
+//                            storageRef.child(id).child("images").child("foto_perfil").child("default_pic").putFile(getImageUri(RegisterActivity.this, b)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     Intent i = new Intent(RegisterActivity.this, NavigationActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     i.putExtra("USER_ID", mAuth.getCurrentUser().getUid());
                                     startActivity(i);
-                                }
-                            });
+//                                }
+//                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "Fallo el registro.",

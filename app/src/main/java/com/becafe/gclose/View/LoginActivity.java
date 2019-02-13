@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.becafe.gclose.Controller.Location.TokenService;
 import com.becafe.gclose.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -113,8 +115,9 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
 
 
+                            TokenService.Token = FirebaseInstanceId.getInstance().getToken();
                             DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("usuarios");
-//                            db.child(id).child("messaging-token").setValue(FirebaseInstanceId.getInstance().getToken());
+                            db.child(id).child("messaging-token").setValue(TokenService.Token);
                             Intent i = new Intent(LoginActivity.this, NavigationActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.putExtra("USER_ID",  id);

@@ -3,7 +3,6 @@ package com.becafe.gclose.View;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -85,11 +83,6 @@ public class NavigationActivity extends AppCompatActivity {
                     if(selectedFragment==null)selectedFragment = new ProfileFragment();
                     break;
                 case R.id.navigation_get_close:
-
-                    Intent i = new Intent(NavigationActivity.this, RecyclerViewActivity.class);
-                    startActivity(i);
-
-
                     tag="getCloseFragment";
                     selectedFragment=getSupportFragmentManager().findFragmentByTag(tag);
                     if(selectedFragment==null)selectedFragment = new GetCloseFragment();
@@ -375,11 +368,8 @@ public class NavigationActivity extends AppCompatActivity {
 
             objData.put("content_available","true");
             objData.put("priority", "high");
-//            objData.put("body", "LA CONCHA DE TU MADRE ALL BOYS"); /* ESTO LLEGA COMO NOTIFICACION */
+//            objData.put("body", "LA ALL BOYS"); /* ESTO LLEGA COMO NOTIFICACION */
 
-            Log.e("ZAFTEXTOOOOOOOOOO", "ASSSSSSSSSFF");
-            Log.wtf("ZAFTOKEN", FirebaseInstanceId.getInstance().getToken());
-//            obj.put("to", FirebaseInstanceId.getInstance().getToken()/*mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("messaging-token").toString()*/);
             if (listaLugaresConfirmados.size()>1) {
                 String sendTopics = "";
                 for (int i = 0; i < listaLugaresConfirmados.size(); i++) {
@@ -424,6 +414,8 @@ public class NavigationActivity extends AppCompatActivity {
         jsObjRequest.setRetryPolicy(policy);
         requestQueue.add(jsObjRequest);
     }
+
+
     //NO DEBERIA EXISTIR ESTE DE ABAJO, SE DEBERIA REDIRECCIONAR DIRECTAMENTE DESDE TOKEN ACTIVITY AL FRAGMENT DE GET CLOSE
     private void showNotificationArrive(String message){
         //OFRECER COMENZAR BUSQUEDA

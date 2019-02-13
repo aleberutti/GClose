@@ -127,7 +127,9 @@ public class ProfileFragment extends Fragment {
         storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                perfil.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+                if (bytes!=null) {
+                    perfil.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -140,7 +142,9 @@ public class ProfileFragment extends Fragment {
         storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                portada.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+                if (bytes!=null) {
+                    portada.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
