@@ -60,17 +60,19 @@ public class EditProfileActivity extends AppCompatActivity {
         desc = findViewById(R.id.EditDesc);
 
         Bundle b = getIntent().getExtras();
-        if (b.getString("educacion")!=null) {
-            studies.setText(b.getString("educacion"));
-        }
-        if (b.getString("trabajo")!=null) {
-            work.setText(b.getString("trabajo"));
-        }
-        if(b.getString("localidad")!=null) {
-            location.setText(b.getString("localidad"));
-        }
-        if (b.getString("descripcion")!=null) {
-            desc.setText(b.getString("descripcion"));
+        if (b!=null) {
+            if (b.getString("educacion") != null) {
+                studies.setText(b.getString("educacion"));
+            }
+            if (b.getString("trabajo") != null) {
+                work.setText(b.getString("trabajo"));
+            }
+            if (b.getString("localidad") != null) {
+                location.setText(b.getString("localidad"));
+            }
+            if (b.getString("descripcion") != null) {
+                desc.setText(b.getString("descripcion"));
+            }
         }
 
         btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
