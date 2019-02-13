@@ -36,23 +36,27 @@ public class DescriptionFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     Usuario user = dataSnapshot.getValue(Usuario.class);
-                    if (user.getEducacion()!=null && user.getEducacion()!="") {
+                    if (user.getEducacion()!=null && !user.getEducacion().isEmpty()) {
                         educacion.setText(user.getEducacion());
+                        educacion.setVisibility(View.VISIBLE);
                     }else {
                         educacion.setVisibility(View.GONE);
                     }
-                    if (user.getTrabajo()!=null && user.getTrabajo()!="") {
+                    if (user.getTrabajo()!=null && !user.getTrabajo().isEmpty()) {
                         trabajo.setText(user.getTrabajo());
+                        trabajo.setVisibility(View.VISIBLE);
                     }else {
                         trabajo.setVisibility(View.GONE);
                     }
-                    if(user.getLocalidad()!=null && user.getLocalidad()!="") {
+                    if(user.getLocalidad()!=null && !user.getLocalidad().isEmpty()) {
                         localidad.setText(user.getLocalidad());
+                        localidad.setVisibility(View.VISIBLE);
                     }else {
                         localidad.setVisibility(View.GONE);
                     }
-                    if (user.getDescripcion()!=null && user.getDescripcion()!="") {
+                    if (user.getDescripcion()!=null && !user.getDescripcion().isEmpty()) {
                         descripcion.setText(user.getDescripcion());
+                        descripcion.setVisibility(View.VISIBLE);
                     }else{
                         descripcion.setVisibility(View.GONE);
                     }
@@ -84,22 +88,22 @@ public class DescriptionFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChildren()) {
                     Usuario user = dataSnapshot.getValue(Usuario.class);
-                    if (user.getEducacion()!=null && user.getEducacion()!="") {
+                    if (user.getEducacion()!=null && !user.getEducacion().isEmpty()) {
                         educacion.setText(user.getEducacion());
                     }else {
                         educacion.setVisibility(View.GONE);
                     }
-                    if (user.getTrabajo()!=null && user.getTrabajo()!="") {
+                    if (user.getTrabajo()!=null && !user.getTrabajo().isEmpty()) {
                         trabajo.setText(user.getTrabajo());
                     }else {
                         trabajo.setVisibility(View.GONE);
                     }
-                    if(user.getLocalidad()!=null && user.getLocalidad()!="") {
+                    if(user.getLocalidad()!=null && !user.getLocalidad().isEmpty()) {
                         localidad.setText(user.getLocalidad());
                     }else {
                         localidad.setVisibility(View.GONE);
                     }
-                    if (user.getDescripcion()!=null && user.getDescripcion()!="") {
+                    if (user.getDescripcion()!=null && !user.getDescripcion().isEmpty()) {
                         descripcion.setText(user.getDescripcion());
                     }else{
                         descripcion.setVisibility(View.GONE);

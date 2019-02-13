@@ -1,12 +1,15 @@
 package com.becafe.gclose.View;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -39,6 +42,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private DatabaseReference myRef;
     private StorageReference storageRef;
+    private boolean flagPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +52,27 @@ public class EditProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         myRef = FirebaseDatabase.getInstance().getReference();
         storageRef = FirebaseStorage.getInstance().getReference();
+        flagPerfil = false;
 
         work = findViewById(R.id.EditWork);
         studies = findViewById(R.id.EditStudies);
         location = findViewById(R.id.EditLocation);
         desc = findViewById(R.id.EditDesc);
+
+        Bundle b = getIntent().getExtras();
+        if (b.getString("educacion")!=null) {
+            studies.setText(b.getString("educacion"));
+        }
+        if (b.getString("trabajo")!=null) {
+            work.setText(b.getString("trabajo"));
+        }
+        if(b.getString("localidad")!=null) {
+            location.setText(b.getString("localidad"));
+        }
+        if (b.getString("descripcion")!=null) {
+            desc.setText(b.getString("descripcion"));
+        }
+
         btnGuardarCambios = findViewById(R.id.btnGuardarCambios);
 
         btnPerfil = findViewById(R.id.btnCambiarPerfil);
@@ -66,25 +86,75 @@ public class EditProfileActivity extends AppCompatActivity {
                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("trabajo").setValue(work.getText().toString());
                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("educacion").setValue(studies.getText().toString());
                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("descripcion").setValue(desc.getText().toString());
+                Toast.makeText(EditProfileActivity.this, "Se han actualizado con éxito los datos", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (i1.resolveActivity(getPackageManager()) != null) {
-                    startActivityForResult(i1, CAMERA);
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(EditProfileActivity.this, R.style.MyDialogTheme);
+                } else {
+                    builder = new AlertDialog.Builder(EditProfileActivity.this);
                 }
+                builder.setTitle("ELIGE UNA APP PARA CARGAR LA FOTO")
+                        .setPositiveButton("Galería", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(Intent.ACTION_PICK);
+                                i.setType("image/*");
+                                flagPerfil = true;
+                                startActivityForResult(i, GALLERY_INTENT);
+                            }
+                        })
+                        .setNeutralButton("Cámara", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (i1.resolveActivity(getPackageManager()) != null) {
+                                    flagPerfil = true;
+                                    startActivityForResult(i1, CAMERA);
+                                }
+                            }
+                        });
+                Dialog diag = builder.create();
+                diag.show();
             }
         });
 
         btnPortada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK);
-                i.setType("image/*");
-                startActivityForResult(i, GALLERY_INTENT);
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(EditProfileActivity.this, R.style.MyDialogTheme);
+                } else {
+                    builder = new AlertDialog.Builder(EditProfileActivity.this);
+                }
+                builder.setTitle("ELIGE UNA APP PARA CARGAR LA FOTO")
+                        .setPositiveButton("Galería", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(Intent.ACTION_PICK);
+                                i.setType("image/*");
+                                flagPerfil = false;
+                                startActivityForResult(i, GALLERY_INTENT);
+                            }
+                        })
+                        .setNeutralButton("Cámara", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (i1.resolveActivity(getPackageManager()) != null) {
+                                    flagPerfil = false;
+                                    startActivityForResult(i1, CAMERA);
+                                }
+                            }
+                        });
+                Dialog diag = builder.create();
+                diag.show();
             }
         });
 
@@ -94,12 +164,19 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        String hijo = "";
+        if (flagPerfil) {
+            hijo = "foto_perfil";
+        }else{
+            hijo = "foto_portada";
+        }
+
         if(requestCode==GALLERY_INTENT && resultCode==RESULT_OK){
             Uri uri = data.getData();
-            storageRef.child(mAuth.getCurrentUser().getUid()).child("images").child("foto_portada").putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            storageRef.child(mAuth.getCurrentUser().getUid()).child("images").child(hijo).putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(EditProfileActivity.this, "Se ha actualizado su foto de portada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditProfileActivity.this, "Se ha actualizado su foto", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -107,11 +184,10 @@ public class EditProfileActivity extends AppCompatActivity {
         if (requestCode == CAMERA && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            storageRef.child(mAuth.getCurrentUser().getUid()).child("images").child("foto_perfil").putFile(getImageUri(this, imageBitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            storageRef.child(mAuth.getCurrentUser().getUid()).child("images").child(hijo).putFile(getImageUri(this, imageBitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(EditProfileActivity.this, "Se ha actualizado su foto de perfil", Toast.LENGTH_SHORT).show();
-                    Log.e("ZAFERROR", "SDFFSD");
+                    Toast.makeText(EditProfileActivity.this, "Se ha actualizado su foto", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -120,7 +196,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
     }

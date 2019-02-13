@@ -10,7 +10,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/tvStyle"
+        android:layout_marginTop="5dp"
+        style="@style/tvStyle3"
         android:text="@string/description"/>
 
     <ScrollView

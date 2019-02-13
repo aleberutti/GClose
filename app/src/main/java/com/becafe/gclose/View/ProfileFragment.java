@@ -43,7 +43,7 @@ public class ProfileFragment extends Fragment {
     private Usuario user;
     private FloatingActionButton btnFloating;
     private static final int EDIT_PROFILE=1354;
-    private final long ONE_MEGABYTE = 1024 * 1024;
+    private final long ONE_MEGABYTE = 1024 * 1024 * 5;
 
     DatabaseReference myRef;
     private FirebaseAuth mAuth;
@@ -165,8 +165,31 @@ public class ProfileFragment extends Fragment {
         btnFloating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
-                getActivity().startActivityForResult(i, EDIT_PROFILE);
+                FirebaseDatabase.getInstance().getReference().child("usuarios").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Usuario user = dataSnapshot.getValue(Usuario.class);
+                        Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
+                        if (user.getEducacion()!=null && !user.getEducacion().isEmpty()) {
+                            i.putExtra("educacion", user.getEducacion());
+                        }
+                        if (user.getTrabajo()!=null && !user.getTrabajo().isEmpty()) {
+                            i.putExtra("trabajo", user.getTrabajo());
+                        }
+                        if(user.getLocalidad()!=null && !user.getLocalidad().isEmpty()) {
+                            i.putExtra("localidad", user.getLocalidad());
+                        }
+                        if (user.getDescripcion()!=null && !user.getDescripcion().isEmpty()) {
+                            i.putExtra("descripcion", user.getDescripcion());
+                        }
+                        getActivity().startActivityForResult(i, EDIT_PROFILE);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
