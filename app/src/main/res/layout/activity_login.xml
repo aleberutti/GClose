@@ -15,6 +15,7 @@ android:background="#303030">
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
+        android:layout_marginTop="100dp"
         app:srcCompat="@drawable/logotest" />
 
 
