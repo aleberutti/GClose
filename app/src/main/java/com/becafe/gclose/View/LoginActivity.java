@@ -31,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                             //Muestro un Toast de ingreso correcto
                             Toast.makeText(LoginActivity.this, id,
                                     Toast.LENGTH_LONG).show();
+
 
                             DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("usuarios");
 //                            db.child(id).child("messaging-token").setValue(FirebaseInstanceId.getInstance().getToken());

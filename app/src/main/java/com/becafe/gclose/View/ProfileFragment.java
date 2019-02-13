@@ -1,5 +1,6 @@
 package com.becafe.gclose.View;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -42,12 +43,44 @@ public class ProfileFragment extends Fragment {
     private Usuario user;
     private FloatingActionButton btnFloating;
     private static final int EDIT_PROFILE=1354;
+    private final long ONE_MEGABYTE = 1024 * 1024;
 
     DatabaseReference myRef;
     private FirebaseAuth mAuth;
     StorageReference storageRef, storageRefAux;
 
     public ProfileFragment() {
+    }
+
+
+    @Override
+    public void onResume() {
+        storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_perfil");
+        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                perfil.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //QUEDA LA POR DEFECTO
+            }
+        });
+        //FOTO DE PORTADA
+        storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_portada");
+        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                portada.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //QUEDA LA POR DEFECTO
+            }
+        });
+        super.onResume();
     }
 
     @Nullable
@@ -62,15 +95,6 @@ public class ProfileFragment extends Fragment {
         viewPager = (ViewPager) v.findViewById(R.id.vpProfile);
         btnFloating = (FloatingActionButton) v.findViewById(R.id.btnFloating);
         adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
-
-//        btnFloating.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
-//                i.putExtra("USER_ID", user_id);
-//                getActivity().startActivityForResult(i, EDIT_PROFILE);
-//            }
-//        });
 
         Fragment galleryFragment = new GalleryFragment();
         Fragment descripFragmnet = new DescriptionFragment();
@@ -98,8 +122,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_perfil/default_pic");
-        final long ONE_MEGABYTE = 1024 * 1024;
+        //FOTO DE PERFIL
+        storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_perfil");
         storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -108,9 +132,25 @@ public class ProfileFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                System.out.println("FALLO");
+                //QUEDA LA POR DEFECTO
             }
         });
+        //FOTO DE PORTADA
+        storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_portada");
+        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                portada.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), perfil.getWidth(), perfil.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //QUEDA LA POR DEFECTO
+            }
+        });
+
+        //BIO
+
 
         adapter.addFragment(descripFragmnet, "");
         adapter.addFragment(galleryFragment, "");
@@ -124,8 +164,9 @@ public class ProfileFragment extends Fragment {
 
         btnFloating.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
+            public void onClick(View v) {
+                Intent i = new Intent (getActivity().getApplicationContext(), EditProfileActivity.class);
+                getActivity().startActivityForResult(i, EDIT_PROFILE);
             }
         });
 

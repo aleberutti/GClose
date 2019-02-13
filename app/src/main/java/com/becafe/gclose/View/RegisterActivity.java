@@ -51,8 +51,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     private FirebaseAuth mAuth;
 
-    DatabaseReference myRef;
-    StorageReference storageRef;
+    private DatabaseReference myRef;
+    private StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

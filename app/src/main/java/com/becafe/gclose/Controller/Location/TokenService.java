@@ -39,12 +39,12 @@ public class TokenService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase.child("usuarios")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("messaging-token")
-                .setValue(token);
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mAuth = FirebaseAuth.getInstance();
+//        mDatabase.child("usuarios")
+//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                .child("messaging-token")
+//                .setValue(token);
         Token=token;
     }
     @Override
