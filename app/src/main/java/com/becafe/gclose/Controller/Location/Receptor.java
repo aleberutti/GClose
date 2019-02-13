@@ -25,6 +25,7 @@ public class Receptor extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("CONTEXTO", context.getClassLoader().toString());
         Intent in = new Intent(context, NavigationActivity.class);
         in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         in.putExtra("choosePlaces", false);
@@ -46,4 +47,6 @@ public class Receptor extends BroadcastReceiver {
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     }
+
+
 }

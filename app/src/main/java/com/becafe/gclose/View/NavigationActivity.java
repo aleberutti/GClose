@@ -120,17 +120,17 @@ public class NavigationActivity extends AppCompatActivity {
 
         //LLEGA LA NOTIFICACION
         if (getIntent().getExtras().get("msj")!=null){
-            showNotificationArrive((String)getIntent().getExtras().get("msj"));
+
         }
         //BUSCA LUGARES PERO NO DEJA ELEGIR (COMPRUEBA QUE SE PERMANECIO EN UN LUGAR)
         if(getIntent().getExtras().get("choosePlaces")!=null && !(boolean)getIntent().getExtras().get("choosePlaces")) {
+            navigation.setSelectedItemId(R.id.navigation_get_close);
             this.checkPlaces();
             Log.wtf("ZAFBUSCA CHECK", "1");
         }
         //BUSCA LOS LUGARES Y DA A ELEGIR PARA LUEGO COMPROBARLOS (SOLO UNA VEZ POR INSTANCIA)
         if (cont<1) {
             Log.wtf("ZAFENTRA DIALOGO", "1");
-            cont++;
             MyAsyncTask mat = new MyAsyncTask(this, true);
             mat.execute();
         }
@@ -340,6 +340,8 @@ public class NavigationActivity extends AppCompatActivity {
                             Log.e("ZAFHABER", ((HashMap<String, String>) listaLugaresConfirmados.get(0)).get("id"));
                             e.printStackTrace();
                         }
+                    }else {
+                        myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").removeValue();
                     }
                 }
             }
@@ -370,6 +372,7 @@ public class NavigationActivity extends AppCompatActivity {
             objData.put("priority", "high");
 //            objData.put("body", "LA ALL BOYS"); /* ESTO LLEGA COMO NOTIFICACION */
 
+            Log.e("ZAF LISTA CONFIRMADOS", String.valueOf(listaLugaresConfirmados.size()));
             if (listaLugaresConfirmados.size()>1) {
                 String sendTopics = "";
                 for (int i = 0; i < listaLugaresConfirmados.size(); i++) {
@@ -436,6 +439,17 @@ public class NavigationActivity extends AppCompatActivity {
         //.show();
         Dialog diag = builder.create();
         diag.show();
+    }
+
+    @Override
+    public void onResume(){
+        if (listaDeseados!=null && listaDeseados.size()>0 && cont==0) {
+            listaLugares.clear();
+            Log.e("ZAF ANDA ALGO", "sDFDFGDFGDF");
+            this.checkPlaces();
+            cont++;
+        }
+        super.onResume();
     }
 
 

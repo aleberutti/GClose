@@ -33,12 +33,13 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".View.LoginActivity" />
-        <activity android:name=".View.RegisterActivity" />
-        <activity android:name=".View.IndexActivity" />
+        <activity android:name=".View.LoginActivity"/>
+        <activity android:name=".View.RegisterActivity"/>
+        <activity android:name=".View.IndexActivity"/>
         <activity
             android:name=".View.NavigationActivity"
-            android:label="@string/title_activity_navigation" />
+            android:label="@string/title_activity_navigation"
+            android:launchMode="singleInstance"/>
         <activity android:name=".View.FullScreenPhotoActivity" />
 
         <receiver
@@ -52,7 +53,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/mapClave" />
 
-        <activity android:name=".View.EditProfileActivity" />
+        <activity android:name=".View.EditProfileActivity"
+            android:launchMode="singleInstance"/>
     </application>
 
 </manifest>

@@ -103,7 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             if (child.getValue().toString().equals(mAuth.getCurrentUser().getUid())){
                                 sendNotification(index);
                                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("matchs").setValue(listUids.get(index));
-                                myRef.child("usuarios").child(listUids.get(index)).child("matchs").setValue(mAuth.getCurrentUser().getUid());
+                                myRef.child("usuarios").child(listUids.get(index)).child("matchs").push().setValue(mAuth.getCurrentUser().getUid());
                                 // ITS A FUCKING MATCH
                                 Intent destino = new Intent(contexto, MainActivity.class);
                                 destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
