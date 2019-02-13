@@ -42,6 +42,8 @@ public class ProfileFragment extends Fragment {
     private String user_id;
     private Usuario user;
     private FloatingActionButton btnFloating;
+    private GalleryFragment galleryFragment;
+    private DescriptionFragment descripFragment;
     private static final int EDIT_PROFILE=1354;
     private final long ONE_MEGABYTE = 1024 * 1024 * 5;
 
@@ -80,6 +82,7 @@ public class ProfileFragment extends Fragment {
                 //QUEDA LA POR DEFECTO
             }
         });
+        Log.wtf("ZAF ENTRA AGAIN", "ON RESUME");
         super.onResume();
     }
 
@@ -94,10 +97,10 @@ public class ProfileFragment extends Fragment {
         tabLayout= (TabLayout) v.findViewById(R.id.tabLayout);
         viewPager = (ViewPager) v.findViewById(R.id.vpProfile);
         btnFloating = (FloatingActionButton) v.findViewById(R.id.btnFloating);
-        adapter = new ViewPageAdapter(getActivity().getSupportFragmentManager());
+        adapter = new ViewPageAdapter(getChildFragmentManager());
 
-        Fragment galleryFragment = new GalleryFragment();
-        Fragment descripFragmnet = new DescriptionFragment();
+        galleryFragment = new GalleryFragment();
+        descripFragment = new DescriptionFragment();
 
 //        if (getArguments().getString("uid")!=null){
             //MOSTRAR PERFIL CON EL UID QUE LLEGA, PERMITIR PONER LIKE/UNLIKE Y TERMINAR EL ONCREATE CON return;
@@ -156,7 +159,7 @@ public class ProfileFragment extends Fragment {
         //BIO
 
 
-        adapter.addFragment(descripFragmnet, "");
+        adapter.addFragment(descripFragment, "");
         adapter.addFragment(galleryFragment, "");
 
 

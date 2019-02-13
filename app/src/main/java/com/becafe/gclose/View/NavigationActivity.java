@@ -93,8 +93,8 @@ public class NavigationActivity extends AppCompatActivity {
             }
 
             getSupportFragmentManager()
-                    .beginTransaction().
-                    replace(R.id.fragmentContainer, selectedFragment, tag)
+                    .beginTransaction()
+                    .replace(R.id.fragmentContainer, selectedFragment, tag)
                     .addToBackStack(null)
                     .commit();
             return true;

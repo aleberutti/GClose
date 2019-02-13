@@ -31,6 +31,8 @@ public class DescriptionFragment extends Fragment {
 
     @Override
     public void onResume(){
+        myRef = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
         myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
