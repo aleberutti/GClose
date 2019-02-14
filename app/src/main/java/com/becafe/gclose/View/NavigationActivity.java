@@ -26,7 +26,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.becafe.gclose.Controller.Location.MyAsyncTask;
 import com.becafe.gclose.Controller.Location.Receptor;
-import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.R;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
