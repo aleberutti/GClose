@@ -1,13 +1,18 @@
 package com.becafe.gclose.View;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +26,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.becafe.gclose.Controller.Location.MyAsyncTask;
 import com.becafe.gclose.Controller.Location.Receptor;
+import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.R;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,6 +57,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -66,6 +73,7 @@ public class NavigationActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static int cont = 0;
     private String texto;
+    private ProgressBar mProgressBar;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -106,10 +114,12 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        mProgressBar = findViewById(R.id.progressbar);
+        mProgressBar.setVisibility(View.INVISIBLE);
+
+        BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         Fragment fragmentInicio = new ProfileFragment();
-//        Fragment fragmentInicio = new GetCloseFragment();
 
         myRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -125,11 +135,9 @@ public class NavigationActivity extends AppCompatActivity {
         if(getIntent().getExtras().get("choosePlaces")!=null && !(boolean)getIntent().getExtras().get("choosePlaces")) {
             navigation.setSelectedItemId(R.id.navigation_get_close);
             this.checkPlaces();
-            Log.wtf("ZAFBUSCA CHECK", "1");
         }
         //BUSCA LOS LUGARES Y DA A ELEGIR PARA LUEGO COMPROBARLOS (SOLO UNA VEZ POR INSTANCIA)
         if (cont<1) {
-            Log.wtf("ZAFENTRA DIALOGO", "1");
             MyAsyncTask mat = new MyAsyncTask(this, true);
             mat.execute();
         }
@@ -232,14 +240,12 @@ public class NavigationActivity extends AppCompatActivity {
                 .setMultiChoiceItems(names, asd, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        Log.e("ZAFWHICH", String.valueOf(which));
                         if ((listaDeseados.isEmpty() || !listaDeseados.contains(listaLugares.get(which))) && isChecked) {
                             listaDeseados.add(listaLugares.get(which));
                         } else {
                             if (listaDeseados.contains(listaLugares.get(which)) && !isChecked)
                                 listaDeseados.remove(listaLugares.get(which));
                         }
-                        Log.e("ZAFLISTADESEADOS", String.valueOf(listaDeseados.size()));
                     }
                 })
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -247,7 +253,6 @@ public class NavigationActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").setValue(listaDeseados);
-                            Log.e("ZAFGUARDADESEADOS", String.valueOf(listaDeseados.size()));
                             // PROGRAMO VERIFICACION A FUTURO
                             scheduleCheck();
                         } catch (StringIndexOutOfBoundsException exc) {
@@ -480,5 +485,70 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
     }
+    class MyTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //Toast.makeText(getApplicationContext(), "Bienvenido", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            for (int i=0; i<=15; i++){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                publishProgress(i);
+            }
+
+            return "Fin";
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            mProgressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Toast.makeText(getApplicationContext(), "Bienvenido", Toast.LENGTH_LONG).show();
+
+            callActivity();
+
+        }
+    }
+
+    public void callActivity(){
+
+
+    }
+
+    @Override
+    public void onBackPressed(){
+
+        String[] arr = {ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        do {
+            ActivityCompat.requestPermissions(this, arr, 0);
+        }while(ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED);
+
+        //Llamo a la actividad login
+        Intent i = new Intent(NavigationActivity.this, LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+
+    }
+
 
 }

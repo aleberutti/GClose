@@ -1,16 +1,21 @@
 package com.becafe.gclose.View;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.becafe.gclose.Controller.Location.TokenService;
+import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +28,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView logo;
 
     private FirebaseAuth mAuth;
+    private ProgressBar mProgressBar;
 
     private DatabaseReference mDatabase;
 
@@ -40,12 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //logo = findViewById(R.id.logo);
-
-        //ImageDecoder dec = new ImageDecoder();
-        //Bitmap log = dec.decodeSampledBitmapFromResource(getResources(),R.drawable.logotest, 250, 250);
-
-        //logo.setImageBitmap(log);
+        mProgressBar = findViewById(R.id.progressbar);
 
         editUser = findViewById(R.id.EditUsername);
         editPass = findViewById(R.id.EditPassword);
@@ -57,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(LoginActivity.this, RecyclerViewActivity.class);
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
             }
         });
@@ -106,22 +111,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            String id = user.getUid();
 
-                            //Muestro un Toast de ingreso correcto
-                            Toast.makeText(LoginActivity.this, id,
-                                    Toast.LENGTH_LONG).show();
-
-
-                            TokenService.Token = FirebaseInstanceId.getInstance().getToken();
-                            DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("usuarios");
-                            db.child(id).child("messaging-token").setValue(TokenService.Token);
-                            Intent i = new Intent(LoginActivity.this, NavigationActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.putExtra("USER_ID",  id);
-                            startActivity(i);
+                            //LLAMO AL PROGRESS BAR PARA EL NUEVO INTENT
+                            new MyTask().execute();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -136,6 +128,76 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    class MyTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            mProgressBar.setVisibility(View.VISIBLE);
+            editUser.setVisibility(View.INVISIBLE);
+            editPass.setVisibility(View.INVISIBLE);
+            register.setVisibility(View.INVISIBLE);
+            btlogin.setVisibility(View.INVISIBLE);
+
+            //Toast.makeText(getApplicationContext(), "Pongo visible", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+            for (int i=0; i<=15; i++){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                publishProgress(i);
+            }
+
+            return "Fin";
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            mProgressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Toast.makeText(getApplicationContext(), "Bienvenido", Toast.LENGTH_LONG).show();
+
+            callActivity();
+
+        }
+    }
+
+    public void callActivity(){
+
+        // Sign in success, update UI with the signed-in user's information
+        FirebaseUser user = mAuth.getCurrentUser();
+        String id = user.getUid();
+
+        //Muestro un Toast de ingreso correcto
+        Toast.makeText(LoginActivity.this, id,
+                Toast.LENGTH_LONG).show();
+
+
+        TokenService.Token = FirebaseInstanceId.getInstance().getToken();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("usuarios");
+        db.child(id).child("messaging-token").setValue(TokenService.Token);
+
+        Intent i = new Intent(LoginActivity.this, NavigationActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("USER_ID",  id);
+        startActivity(i);
+
+    }
 
 
 }
