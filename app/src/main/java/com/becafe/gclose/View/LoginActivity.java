@@ -3,6 +3,7 @@ package com.becafe.gclose.View;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -183,7 +184,8 @@ public class LoginActivity extends AppCompatActivity {
 
         TokenService.Token = FirebaseInstanceId.getInstance().getToken();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("usuarios");
-        db.child(id).child("messaging-token").setValue(TokenService.Token);
+        db.child(id).child("messaging-token").setValue(FirebaseInstanceId.getInstance().getToken());
+        Log.e("ZAF TOKENLOGIN",FirebaseInstanceId.getInstance().getToken());
 
         Intent i = new Intent(LoginActivity.this, NavigationActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

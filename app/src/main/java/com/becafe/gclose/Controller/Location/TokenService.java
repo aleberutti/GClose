@@ -40,21 +40,29 @@ public class TokenService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase.child("usuarios")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("messaging-token")
-                .setValue(token);
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mAuth = FirebaseAuth.getInstance();
+//        mDatabase.child("usuarios")
+//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                .child("messaging-token")
+//                .setValue(token);
         Token=token;
     }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.e("ASfsdfdf", remoteMessage.toString());
         JSONObject json = new JSONObject(remoteMessage.getData());
+        Log.e("ZAF LLEGANOTIFICACION", "ASFREER");
+        if (remoteMessage == null){
+            Log.e("FAUSTO3", "ES NULL");
+
+        }
+        if (remoteMessage.getData().toString().isEmpty()){
+            Log.e("ASfsdfdf", "fgnerige");
+        }
+        Log.e("FAUSTO3", remoteMessage.getData().toString());
         try {
-            Log.e("FAUSTO2", json.getString("is-match"));
-            Log.e("FAUSTO2", json.getString("message"));
-            if (json.getString("is-match") == null) {
+            if (json.getString("is-match").equals("true")) {
                 Intent destino = new Intent(getBaseContext(), MainActivity.class);
                 destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -72,8 +80,11 @@ public class TokenService extends FirebaseMessagingService {
                 NotificationManagerCompat notificationManager =
                         NotificationManagerCompat.from(getBaseContext());
                 notificationManager.notify(99, mBuilder.build());
-            } else {
+            }
+        }catch (JSONException exception){
+            try {
                 if (json.getString("match-request").equals("true")) {
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
                     llegaUid = json.getString("message");
                     mDatabase.child("usuarios").child(llegaUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -103,13 +114,18 @@ public class TokenService extends FirebaseMessagingService {
 
                         }
                     });
-                } else{
+                }
+            }catch(JSONException exc){
+                try {
+                    Log.e("ZAF tienequeentrar", "segdfgdfgr");
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     mAuth = FirebaseAuth.getInstance();
                     //            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
+                    Log.e("ZAF tienequeentrar2", "segdfgdfgr");
                     Log.e("ZAFLLEGA NOTIFICACION", json.getString("message"));
                     llegaUid = json.getString("message");
                     Log.e("ZAFllegaUid", llegaUid);
+                    Log.e("ZAF tienequeentrar3", "segdfgdfgr");
                     // -------------------ACA HACER INTENT AL FRAGMENT DE GET CLOSE!!!!!!!!!!!!!! ------------------------------
                     Log.e("ZAFCONTEXT", getApplicationContext().getClass().getName());
                     if (llegaUid.equals(mAuth.getCurrentUser().getUid())) {
@@ -181,10 +197,10 @@ public class TokenService extends FirebaseMessagingService {
                             }
                         });
                     }
+                }catch (JSONException e){
+
                 }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 

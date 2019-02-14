@@ -37,6 +37,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
@@ -103,19 +104,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         profile=holder.imgProfile;
 
-        storageRef = FirebaseStorage.getInstance().getReference().child("/"+listUids.get(index)+"/images/foto_perfil");
-        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                profile.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), profile.getWidth(), profile.getHeight(), false));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                //QUEDA LA POR DEFECTO
-               profile.setImageBitmap(BitmapFactory.decodeResource(contexto.getResources(), R.drawable.logotest));
-            }
-        });
+        try {
+            storageRef = FirebaseStorage.getInstance().getReference().child("/" + listUids.get(index) + "/images/foto_perfil");
+            storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    profile.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), profile.getWidth(), profile.getHeight(), false));
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    //QUEDA LA POR DEFECTO
+                    profile.setImageBitmap(BitmapFactory.decodeResource(contexto.getResources(), R.drawable.logotest));
+                }
+            });
+        }catch (Exception ex){
+            profile.setImageBitmap(BitmapFactory.decodeResource(contexto.getResources(), R.drawable.logotest));
+        }
         String name = usuarioLista.get(position).getNombre()+" "+ usuarioLista.get(position).getApellido();
         String edad = "Edad: " + usuarioLista.get(position).getAge();
         holder.tvNombre.setText(name);
@@ -123,14 +128,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.btMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("ZAF APRIETA BOTON", "SDFDSFG");
                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("likes").push().setValue(listUids.get(index));
                 myRef.child("usuarios").child(listUids.get(index)).child("likes").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         int i = 0;
+                        Log.e("ZAF LLEGAANOTIFICACION", "SDFDSFG");
                         for (DataSnapshot child: dataSnapshot.getChildren()) {
                             i++;
+                            Log.e("ZAF LLEGAANOTIFICACION1", "SDFDSFG");
                             if (child.getValue().toString().equals(mAuth.getCurrentUser().getUid())){
+                                Log.e("ZAF LLEGAANOTIFICACION", "SDFDSFG");
                                 sendNotification(index, true);
                                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("matchs").push().setValue(listUids.get(index));
                                 myRef.child("usuarios").child(listUids.get(index)).child("matchs").push().setValue(mAuth.getCurrentUser().getUid());
@@ -141,6 +150,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 createNotificationChannel();
                                 PendingIntent pendingIntent =
                                         PendingIntent.getActivity(contexto, 0, destino, 0);
+                                Log.e("ZAF GENERARNOTIFICACION", "SDFDSFG");
                                 NotificationCompat.Builder mBuilder = new
                                         NotificationCompat.Builder(contexto, "2")
                                         .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
@@ -152,14 +162,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 NotificationManagerCompat notificationManager =
                                         NotificationManagerCompat.from(contexto);
                                 notificationManager.notify(99, mBuilder.build());
+                                Log.e("ZAF SALEDEGENERAR", "SDFDSFG");
                                 usuarioLista.remove(index);
                                 listUids.remove(index);
                                 RecyclerViewAdapter.this.notifyDataSetChanged();
                                 return ;
                             }
                             if (i == dataSnapshot.getChildrenCount()){
+                                usuarioLista.remove(index);
+                                listUids.remove(index);
+                                RecyclerViewAdapter.this.notifyDataSetChanged();
                                 sendNotification(index, false);
+                                return ;
                             }
+                        }
+                        if (i == dataSnapshot.getChildrenCount()){
+                            sendNotification(index, false);
+                            usuarioLista.remove(index);
+                            listUids.remove(index);
+                            RecyclerViewAdapter.this.notifyDataSetChanged();
+                            return ;
                         }
                     }
 
@@ -202,6 +224,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public void sendNotification(int index, boolean isMatch) {
+        Log.e("ZAF ENTRANOTIFICACION1", "SDFDSFG");
         final boolean match = isMatch;
         myRef.child("usuarios").child(listUids.get(index)).child("messaging-token").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -217,10 +240,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     dataobjData = new JSONObject();
                     dataobjData.put("message", mAuth.getCurrentUser().getUid());
+                    Log.e("Valor de match", String.valueOf(match));
                     if (!match){
                         dataobjData.put("match-request", "true");
+                    }else{
+                        dataobjData.put("is-match", "true");
                     }
-
 
                     objData.put("content_available","true");
                     objData.put("priority", "high");
