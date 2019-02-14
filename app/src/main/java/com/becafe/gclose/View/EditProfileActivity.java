@@ -194,11 +194,11 @@ public class EditProfileActivity extends AppCompatActivity {
             hijo = "foto_portada";
         }
 
-        Log.e("ZAF HABERFLAG2",String.valueOf(flagOut));
-        new MyTask().execute();
-        Log.e("ZAF HABERFLAG3",String.valueOf(flagOut));
 
         if(requestCode==GALLERY_INTENT && resultCode==RESULT_OK){
+            Log.e("ZAF HABERFLAG2",String.valueOf(flagOut));
+            new MyTask().execute();
+            Log.e("ZAF HABERFLAG3",String.valueOf(flagOut));
             Uri uri = data.getData();
             storageRef.child(mAuth.getCurrentUser().getUid()).child("images").child(hijo).putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -218,6 +218,9 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         if (requestCode == CAMERA && resultCode == RESULT_OK) {
+            Log.e("ZAF HABERFLAG2",String.valueOf(flagOut));
+            new MyTask().execute();
+            Log.e("ZAF HABERFLAG3",String.valueOf(flagOut));
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             storageRef.child(mAuth.getCurrentUser().getUid()).child("images").child(hijo).putFile(getImageUri(this, imageBitmap)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -282,7 +285,7 @@ public class EditProfileActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             Log.e("ZAF HABERFLAG4",String.valueOf(flagOut));
-            do {
+            while(!flagOut) {
                 for (int i = 0; i <= 15; i++) {
                     Log.e("ZAF HABERFLAG",String.valueOf(flagOut));
                     try {
@@ -297,7 +300,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         return "Fin";
                     }
                 }
-            }while(!flagOut);
+            }
             Log.e("ZAF HABERFLAG5",String.valueOf(flagOut));
             return "Fin";
         }
@@ -331,6 +334,12 @@ public class EditProfileActivity extends AppCompatActivity {
             divider.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    @Override
+    public void onResume(){
+//        flagOut = true;
+        super.onResume();
     }
 
 }

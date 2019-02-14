@@ -64,7 +64,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class NavigationActivity extends AppCompatActivity {
 
-    private boolean flag;
+    private boolean flag, flagOK;
     private List<Place> listaLugares;
     private List listaLugaresConfirmados, listaDeseados;
     private String tag="";
@@ -113,6 +113,8 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        flagOK = false;
+
         mProgressBar = findViewById(R.id.progressbar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
@@ -122,6 +124,8 @@ public class NavigationActivity extends AppCompatActivity {
 
         myRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+
+        myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").removeValue();
 
         // LOCATION SELECT
         this.flag = false;
@@ -251,6 +255,7 @@ public class NavigationActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
+                            flagOK = true;
                             myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").setValue(listaDeseados);
                             // PROGRAMO VERIFICACION A FUTURO
                             scheduleCheck();
@@ -262,12 +267,6 @@ public class NavigationActivity extends AppCompatActivity {
 
         //.show();
         Dialog diag = builder.create();
-        diag.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").removeValue();
-            }
-        });
         diag.show();
     }
 
@@ -293,8 +292,8 @@ public class NavigationActivity extends AppCompatActivity {
         myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.e("ZAFSIZELISTADESEADOS", dataSnapshot.getValue().toString());
-                Log.e("ZAFCount ", "" + dataSnapshot.getChildrenCount());
+//                Log.e("ZAFSIZELISTADESEADOS", dataSnapshot.getValue().toString());
+//                Log.e("ZAFCount ", "" + dataSnapshot.getChildrenCount());
                 listaDeseados = new ArrayList<HashMap<String, String>>();
                 for (int i = 0; i < dataSnapshot.getChildrenCount(); i++) {
                     listaDeseados.add(dataSnapshot.child("" + i).getValue());
