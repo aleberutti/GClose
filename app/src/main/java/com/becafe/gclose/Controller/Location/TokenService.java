@@ -54,7 +54,7 @@ public class TokenService extends FirebaseMessagingService {
         try {
             Log.e("FAUSTO2", json.getString("is-match"));
             Log.e("FAUSTO2", json.getString("message"));
-            if (json.getString("is-match")==null){
+            if (json.getString("is-match") == null) {
                 Intent destino = new Intent(getBaseContext(), MainActivity.class);
                 destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -72,76 +72,30 @@ public class TokenService extends FirebaseMessagingService {
                 NotificationManagerCompat notificationManager =
                         NotificationManagerCompat.from(getBaseContext());
                 notificationManager.notify(99, mBuilder.build());
-            }else {
-                mDatabase = FirebaseDatabase.getInstance().getReference();
-                mAuth = FirebaseAuth.getInstance();
-                //            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
-                Log.e("ZAFLLEGA NOTIFICACION", json.getString("message"));
-                llegaUid = json.getString("message");
-                Log.e("ZAFllegaUid", llegaUid);
-                // -------------------ACA HACER INTENT AL FRAGMENT DE GET CLOSE!!!!!!!!!!!!!! ------------------------------
-                Log.e("ZAFCONTEXT", getApplicationContext().getClass().getName());
-                if (llegaUid.equals(mAuth.getCurrentUser().getUid())) {
-                    // ABRIR FRAGMENT GET CLOSE
-                    Intent asd = new Intent(getApplicationContext(), NavigationActivity.class);
-                    asd.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    asd.putExtra("msj", json.getString("message"));
-                    startActivity(asd);
-                } else {
-                    mDatabase.child("usuarios").child("likes").addListenerForSingleValueEvent(new ValueEventListener() {
+            } else {
+                if (json.getString("match-request").equals("true")) {
+                    llegaUid = json.getString("message");
+                    mDatabase.child("usuarios").child(llegaUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                if (child.getValue().toString().equals(llegaUid)) {
-                                    return;
-                                }
-                            }
-                            mDatabase.child("usuarios").child("unlikes").addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot child : dataSnapshot.getChildren()) {
-                                        if (child.getValue().toString().equals(llegaUid)) {
-                                            return;
-                                        }
-                                    }
-                                    //SI LLEGA ACÁ QUIERE DECIR QUE NUNCA HA VISTO EL PERFIL QUE SE ACABA DE REGISTRAR AL LUGAR
-                                    mDatabase.child("usuarios").child(llegaUid).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            dataSnapshot.getValue(Usuario.class);
-                                            //ENVIAR NOTIFICACIÓN DE QUE SE HA REGISTRADO UN NUEVO USUARIO
-                                            Intent destino = new Intent(getApplicationContext(), ProfileFragment.class);
-                                            destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
-                                                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                            destino.putExtra("uid", llegaUid);
-                                            createNotificationChannel();
-                                            PendingIntent pendingIntent =
-                                                    PendingIntent.getActivity(getApplicationContext(), 0, destino, 0);
-                                            NotificationCompat.Builder mBuilder = new
-                                                    NotificationCompat.Builder(getApplicationContext(), "1")
-                                                    .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
-                                                    .setContentTitle("Nuevo usuario en el lugar")
-                                                    .setContentText("Presiona aquí para ver su perfil")
-                                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                                                    .setContentIntent(pendingIntent)
-                                                    .setAutoCancel(true);
-                                            NotificationManagerCompat notificationManager =
-                                                    NotificationManagerCompat.from(getApplicationContext());
-                                            notificationManager.notify(99, mBuilder.build());
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
+                            Usuario emisor = dataSnapshot.getValue(Usuario.class);
+                            Intent destino = new Intent(getBaseContext(), MainActivity.class);
+                            destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            createNotificationChannel();
+                            PendingIntent pendingIntent =
+                                    PendingIntent.getActivity(getBaseContext(), 0, destino, 0);
+                            NotificationCompat.Builder mBuilder = new
+                                    NotificationCompat.Builder(getBaseContext(), "2")
+                                    .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
+                                    .setContentTitle("⚠ Tienes una nueva propuesta ⚠")
+                                    .setContentText(emisor.getNombre() + " está en tu sitio y quiere concerte. \nPresiona para ver su perfil")
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setContentIntent(pendingIntent)
+                                    .setAutoCancel(true);
+                            NotificationManagerCompat notificationManager =
+                                    NotificationManagerCompat.from(getBaseContext());
+                            notificationManager.notify(99, mBuilder.build());
                         }
 
                         @Override
@@ -149,6 +103,84 @@ public class TokenService extends FirebaseMessagingService {
 
                         }
                     });
+                } else{
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    mAuth = FirebaseAuth.getInstance();
+                    //            Log.e("ZAFLLEGA NOTIFICACION", remoteMessage.getNotification().getBody());
+                    Log.e("ZAFLLEGA NOTIFICACION", json.getString("message"));
+                    llegaUid = json.getString("message");
+                    Log.e("ZAFllegaUid", llegaUid);
+                    // -------------------ACA HACER INTENT AL FRAGMENT DE GET CLOSE!!!!!!!!!!!!!! ------------------------------
+                    Log.e("ZAFCONTEXT", getApplicationContext().getClass().getName());
+                    if (llegaUid.equals(mAuth.getCurrentUser().getUid())) {
+                        // ABRIR FRAGMENT GET CLOSE
+                        Intent asd = new Intent(getApplicationContext(), NavigationActivity.class);
+                        asd.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        asd.putExtra("msj", json.getString("message"));
+                        startActivity(asd);
+                    } else {
+                        mDatabase.child("usuarios").child("likes").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                    if (child.getValue().toString().equals(llegaUid)) {
+                                        return;
+                                    }
+                                }
+                                mDatabase.child("usuarios").child("unlikes").addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                            if (child.getValue().toString().equals(llegaUid)) {
+                                                return;
+                                            }
+                                        }
+                                        //SI LLEGA ACÁ QUIERE DECIR QUE NUNCA HA VISTO EL PERFIL QUE SE ACABA DE REGISTRAR AL LUGAR
+                                        mDatabase.child("usuarios").child(llegaUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getValue(Usuario.class);
+                                                //ENVIAR NOTIFICACIÓN DE QUE SE HA REGISTRADO UN NUEVO USUARIO
+                                                Intent destino = new Intent(getApplicationContext(), ProfileFragment.class);
+                                                destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
+                                                        Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                destino.putExtra("uid", llegaUid);
+                                                createNotificationChannel();
+                                                PendingIntent pendingIntent =
+                                                        PendingIntent.getActivity(getApplicationContext(), 0, destino, 0);
+                                                NotificationCompat.Builder mBuilder = new
+                                                        NotificationCompat.Builder(getApplicationContext(), "1")
+                                                        .setSmallIcon(R.drawable.ic_person_outline_black_24dp)
+                                                        .setContentTitle("Nuevo usuario en el lugar")
+                                                        .setContentText("Presiona aquí para ver su perfil")
+                                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                                        .setContentIntent(pendingIntent)
+                                                        .setAutoCancel(true);
+                                                NotificationManagerCompat notificationManager =
+                                                        NotificationManagerCompat.from(getApplicationContext());
+                                                notificationManager.notify(99, mBuilder.build());
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
                 }
             }
         } catch (JSONException e) {

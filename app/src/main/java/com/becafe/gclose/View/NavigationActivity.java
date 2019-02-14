@@ -118,10 +118,9 @@ public class NavigationActivity extends AppCompatActivity {
         this.flag = false;
         this.listaLugares = new ArrayList<Place>();
 
-        //LLEGA LA NOTIFICACION
-        if (getIntent().getExtras().get("msj")!=null){
+        //LIMPIO PLACES
+        this.clearPlaces();
 
-        }
         //BUSCA LUGARES PERO NO DEJA ELEGIR (COMPRUEBA QUE SE PERMANECIO EN UN LUGAR)
         if(getIntent().getExtras().get("choosePlaces")!=null && !(boolean)getIntent().getExtras().get("choosePlaces")) {
             navigation.setSelectedItemId(R.id.navigation_get_close);
@@ -256,8 +255,15 @@ public class NavigationActivity extends AppCompatActivity {
                         }
                     }
                 });
+
         //.show();
         Dialog diag = builder.create();
+        diag.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").removeValue();
+            }
+        });
         diag.show();
     }
 
@@ -453,5 +459,26 @@ public class NavigationActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    private void clearPlaces(){
+        myRef.child("places").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Log.e("HABERRR", String.valueOf(child.getChildrenCount()));
+                    for (DataSnapshot chil : child.getChildren()) {
+                        Log.e("HABERRR1", chil.getValue().toString());
+                        if (chil.getValue().toString().equals(mAuth.getCurrentUser().getUid())){
+                            chil.getRef().removeValue();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

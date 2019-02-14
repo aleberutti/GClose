@@ -99,9 +99,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 myRef.child("usuarios").child(listUids.get(index)).child("likes").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int i = 0;
                         for (DataSnapshot child: dataSnapshot.getChildren()) {
+                            i++;
                             if (child.getValue().toString().equals(mAuth.getCurrentUser().getUid())){
-                                sendNotification(index);
+                                sendNotification(index, true);
                                 myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("matchs").push().setValue(listUids.get(index));
                                 myRef.child("usuarios").child(listUids.get(index)).child("matchs").push().setValue(mAuth.getCurrentUser().getUid());
                                 // ITS A FUCKING MATCH
@@ -122,12 +124,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 NotificationManagerCompat notificationManager =
                                         NotificationManagerCompat.from(contexto);
                                 notificationManager.notify(99, mBuilder.build());
-
+                                usuarioLista.remove(index);
+                                listUids.remove(index);
+                                RecyclerViewAdapter.this.notifyDataSetChanged();
+                                return ;
+                            }
+                            if (i == dataSnapshot.getChildrenCount()){
+                                sendNotification(index, false);
                             }
                         }
-                        usuarioLista.remove(index);
-                        listUids.remove(index);
-                        RecyclerViewAdapter.this.notifyDataSetChanged();
                     }
 
                     @Override
@@ -168,8 +173,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-    public void sendNotification(int index) {
-
+    public void sendNotification(int index, boolean isMatch) {
+        final boolean match = isMatch;
         myRef.child("usuarios").child(listUids.get(index)).child("messaging-token").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -184,6 +189,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     dataobjData = new JSONObject();
                     dataobjData.put("message", mAuth.getCurrentUser().getUid());
+                    if (!match){
+                        dataobjData.put("match-request", "true");
+                    }
 
 
                     objData.put("content_available","true");
@@ -193,6 +201,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Log.e("ZAFTEXTOOOOOOOOOO", "ASSSSSSSSSFF");
                     Log.wtf("ZAFTOKEN", dataSnapshot.getValue().toString());
                     obj.put("to", dataSnapshot.getValue().toString());
+
                     obj.put("notification", objData);
                     obj.put("data", dataobjData);
 
