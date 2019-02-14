@@ -1,5 +1,7 @@
 package com.becafe.gclose.Model;
 
+import com.google.errorprone.annotations.FormatString;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -96,7 +98,7 @@ public class Usuario {
         this.fecha_nac = fecha_nac;
     }
 
-    public int getAge(){
+    public String getAge(){
 
         Date date = null;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -106,7 +108,7 @@ public class Usuario {
             e.printStackTrace();
         }
 
-        if(date == null) return 0;
+        if(date == null) return "";
 
         Calendar dob = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
@@ -124,6 +126,7 @@ public class Usuario {
         if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
             age--;
         }
-        return age;
+
+        return Integer.toString(age);
     }
 }

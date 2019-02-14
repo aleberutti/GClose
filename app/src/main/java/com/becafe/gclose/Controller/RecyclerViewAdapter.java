@@ -62,7 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             tvNombre = itemView.findViewById(R.id.tvNombreUsuario);
             tvEdad = itemView.findViewById(R.id.tvEdad);
-            imgProfile = itemView.findViewById(R.id.imageCantante);
+            imgProfile = itemView.findViewById(R.id.imageProfile);
             btMatch = itemView.findViewById(R.id.btnFloatingMatch);
             btNo = itemView.findViewById(R.id.btnFloatingNot);
         }
@@ -77,6 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private StorageReference storageRef;
     private final long ONE_MEGABYTE = 1024 * 1024 * 5;
     int width, height;
+    private ImageView profile;
 
     private Context contexto;
 
@@ -100,25 +101,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         myRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        width= holder.imgProfile.getWidth();
-        height= holder.imgProfile.getHeight();
+        profile=holder.imgProfile;
 
         storageRef = FirebaseStorage.getInstance().getReference().child("/"+listUids.get(index)+"/images/foto_perfil");
         storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                bitMap= (Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), width, height, false));
+                profile.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), profile.getWidth(), profile.getHeight(), false));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 //QUEDA LA POR DEFECTO
+               profile.setImageBitmap(BitmapFactory.decodeResource(contexto.getResources(), R.drawable.logotest));
             }
         });
-        holder.imgProfile.setImageBitmap(bitMap);
-        String name = usuarioLista.get(position).getNombre() + usuarioLista.get(position).getApellido();
+        String name = usuarioLista.get(position).getNombre()+" "+ usuarioLista.get(position).getApellido();
+        String edad = "Edad: " + usuarioLista.get(position).getAge();
         holder.tvNombre.setText(name);
-        holder.tvEdad.setText(usuarioLista.get(position).getAge());
+        holder.tvEdad.setText(edad);
         holder.btMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

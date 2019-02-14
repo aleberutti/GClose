@@ -122,6 +122,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
         //FOTO DE PERFIL
         storageRef = FirebaseStorage.getInstance().getReference().child("/"+mAuth.getCurrentUser().getUid()+"/images/foto_perfil");
         storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
