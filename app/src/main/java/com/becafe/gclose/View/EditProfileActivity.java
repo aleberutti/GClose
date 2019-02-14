@@ -43,8 +43,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private MaterialButton btnPerfil, btnPortada, btnGaleria, btnGuardarCambios;
     private static final int GALLERY_INTENT=1;
     private static final int GALLERY_INTENT_PERFIL=2;
-    private static final int CROP_IMAGE=3;
+    private static final int REQUEST_CODE_CROP_IMAGE=3;
     private static final int CAMERA=4;
+
 
     private FirebaseAuth mAuth;
 
@@ -341,5 +342,6 @@ public class EditProfileActivity extends AppCompatActivity {
 //        flagOut = true;
         super.onResume();
     }
+
 
 }

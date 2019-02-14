@@ -12,10 +12,11 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="5dp"
         cardview:cardCornerRadius="4dp"
-        cardview:cardElevation="5dp">
+        cardview:cardElevation="5dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,33 +25,33 @@
             android:padding="8dp">
 
             <ImageView
-                android:id="@+id/imageCantante"
+                android:id="@+id/imageProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:srcCompat="@drawable/logotest" />
 
             <LinearLayout
-                android:layout_width="109dp"
+                android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvCantante"
+                    android:id="@+id/tvNombreUsuario"
+                    style="@style/navigationStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Juan Ignacio Cabrera"
-                    android:textColor="@color/fui_bgGitHub"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/tvNacionalidad"
+                    android:id="@+id/tvEdad"
+                    style="@style/navigationStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:text="Edad: 20"
-                    android:textColor="@color/fui_bgGitHub"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -64,26 +65,28 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnFloatingMatch"
-                    android:layout_width="72dp"
-                    android:layout_height="42dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginLeft="10dp"
                     android:textAlignment="center"
                     app:backgroundTint="@color/gclose_color"
                     app:elevation="8dp"
+                    app:fabCustomSize="50dp"
                     app:fabSize="normal"
                     app:rippleColor="@color/fui_bgGitHub"
                     app:srcCompat="@drawable/ic_favorite_white_24dp" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnFloatingNot"
-                    android:layout_width="44dp"
-                    android:layout_height="42dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginLeft="15dp"
                     android:textAlignment="center"
-                    app:backgroundTint="@color/fui_bgGitHub"
+                    app:backgroundTint="@color/btn_no_color"
                     app:elevation="8dp"
+                    app:fabCustomSize="50dp"
                     app:fabSize="normal"
                     app:rippleColor="@color/fui_bgGitHub"
                     app:srcCompat="@drawable/ic_sentiment_dissatisfied_black_24dp" />

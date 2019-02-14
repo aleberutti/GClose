@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,8 @@ import com.android.volley.toolbox.Volley;
 import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +36,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,15 +54,15 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     public static class ViewHolder extends  RecyclerView.ViewHolder{
-        private TextView cantante, nacionalidad;
-        private ImageView imgCantante;
+        private TextView tvEdad, tvNombre;
+        private ImageView imgProfile;
         private FloatingActionButton btMatch, btNo;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            cantante = itemView.findViewById(R.id.tvCantante);
-            nacionalidad = itemView.findViewById(R.id.tvNacionalidad);
-            imgCantante = itemView.findViewById(R.id.imageCantante);
+            tvNombre = itemView.findViewById(R.id.tvNombreUsuario);
+            tvEdad = itemView.findViewById(R.id.tvEdad);
+            imgProfile = itemView.findViewById(R.id.imageProfile);
             btMatch = itemView.findViewById(R.id.btnFloatingMatch);
             btNo = itemView.findViewById(R.id.btnFloatingNot);
         }
@@ -67,6 +73,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
+    private Bitmap bitMap;
+    private StorageReference storageRef;
+    private final long ONE_MEGABYTE = 1024 * 1024 * 5;
+    int width, height;
+    private ImageView profile;
 
     private Context contexto;
 
@@ -89,9 +100,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final int index = position;
         myRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        holder.cantante.setText(usuarioLista.get(position).getApellido());
-        holder.nacionalidad.setText(usuarioLista.get(position).getNombre());
-        holder.imgCantante.setImageResource(R.drawable.gclose_logo);
+
+        profile=holder.imgProfile;
+
+        storageRef = FirebaseStorage.getInstance().getReference().child("/"+listUids.get(index)+"/images/foto_perfil");
+        storageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                profile.setImageBitmap(Bitmap.createScaledBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length), profile.getWidth(), profile.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //QUEDA LA POR DEFECTO
+               profile.setImageBitmap(BitmapFactory.decodeResource(contexto.getResources(), R.drawable.logotest));
+            }
+        });
+        String name = usuarioLista.get(position).getNombre()+" "+ usuarioLista.get(position).getApellido();
+        String edad = "Edad: " + usuarioLista.get(position).getAge();
+        holder.tvNombre.setText(name);
+        holder.tvEdad.setText(edad);
         holder.btMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
