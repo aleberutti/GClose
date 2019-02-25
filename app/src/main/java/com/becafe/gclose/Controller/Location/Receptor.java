@@ -13,14 +13,14 @@ import java.util.Calendar;
 
 public class Receptor extends BroadcastReceiver {
 
-    private NavigationActivity nav;
+    private static NavigationActivity nav;
 
     public Receptor(){
 
     }
 
     public Receptor(NavigationActivity n){
-        nav = n;
+        Receptor.nav = n;
     }
 
     @Override
@@ -28,7 +28,6 @@ public class Receptor extends BroadcastReceiver {
         Log.e("CONTEXTO", context.getClassLoader().toString());
         Intent in = new Intent(context, NavigationActivity.class);
         in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        in.putExtra("choosePlaces", false);
         context.startActivity(in);
     }
 

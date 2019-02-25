@@ -1,12 +1,10 @@
 package com.becafe.gclose.View;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +35,6 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,23 +53,23 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class NavigationActivity extends AppCompatActivity {
+public class NavigationActivity extends AppCompatActivity{
 
     private boolean flag, flagOK;
     private List<Place> listaLugares;
     private List listaLugaresConfirmados, listaDeseados;
-    private String tag="";
+    private String tag="", user_id;
     private DatabaseReference myRef;
-    private FirebaseAuth mAuth;
-    private static int cont = 0;
-    private String texto;
+    private int cont = 0;
     private ProgressBar mProgressBar;
+    private ProfileFragment fragmentoPerfil;
+    private GetCloseFragment gCloseFragment;
+    private BottomNavigationView navigation;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -87,23 +84,45 @@ public class NavigationActivity extends AppCompatActivity {
                 case R.id.navigation_profile:
                     tag="profileFragment";
                     selectedFragment=getSupportFragmentManager().findFragmentByTag(tag);
-                    if(selectedFragment==null)selectedFragment = new ProfileFragment();
+                    if(selectedFragment==null){
+                        selectedFragment = new ProfileFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("USER_ID", user_id);
+                        selectedFragment.setArguments(bundle);
+                    }else{
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .show(selectedFragment)
+                                .hide(getSupportFragmentManager().findFragmentByTag("getCloseFragment"))
+                                .setReorderingAllowed(true)
+                                .commitNowAllowingStateLoss();
+                    }
                     break;
                 case R.id.navigation_get_close:
                     tag="getCloseFragment";
                     selectedFragment=getSupportFragmentManager().findFragmentByTag(tag);
-                    if(selectedFragment==null)selectedFragment = new GetCloseFragment();
-
+                    if(selectedFragment==null){
+                        Bundle bundle = new Bundle();
+                        bundle.putString("USER_ID", user_id);
+                        gCloseFragment.setArguments(bundle);
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .hide(getSupportFragmentManager().findFragmentByTag("profileFragment"))
+                                .add(R.id.fragmentContainer, gCloseFragment, tag)
+                                .addToBackStack(tag)
+                                .commit();
+                    }else{
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .show(selectedFragment)
+                                .hide(getSupportFragmentManager().findFragmentByTag("profileFragment"))
+                                .setReorderingAllowed(true)
+                                .commitNowAllowingStateLoss();
+                    }
                     break;
                 case R.id.navigation_crushes:
                     break;
             }
-
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainer, selectedFragment, tag)
-                    .addToBackStack(null)
-                    .commit();
             return true;
         }
     };
@@ -115,34 +134,38 @@ public class NavigationActivity extends AppCompatActivity {
 
         flagOK = false;
 
+        gCloseFragment = new GetCloseFragment();
+        fragmentoPerfil = new ProfileFragment();
+
         mProgressBar = findViewById(R.id.progressbar);
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        Fragment fragmentInicio = new ProfileFragment();
+        
+        user_id = getIntent().getExtras().getString("USER_ID");
 
         myRef = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
-        myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").removeValue();
 
         // LOCATION SELECT
         this.flag = false;
         this.listaLugares = new ArrayList<Place>();
 
-        //LIMPIO PLACES
-        this.clearPlaces();
 
         //BUSCA LUGARES PERO NO DEJA ELEGIR (COMPRUEBA QUE SE PERMANECIO EN UN LUGAR)
+        Log.e("ZAFSONOALARMA10", "ASDF");
         if(getIntent().getExtras().get("choosePlaces")!=null && !(boolean)getIntent().getExtras().get("choosePlaces")) {
+            Log.e("ZAFSONOALARMA0", "ASDF");
             navigation.setSelectedItemId(R.id.navigation_get_close);
             this.checkPlaces();
         }
         //BUSCA LOS LUGARES Y DA A ELEGIR PARA LUEGO COMPROBARLOS (SOLO UNA VEZ POR INSTANCIA)
         if (cont<1) {
-            MyAsyncTask mat = new MyAsyncTask(this, true);
-            mat.execute();
+            checkPlaces();
+//            MyAsyncTask mat = new MyAsyncTask(this, true);
+//            mat.execute();
+            //LIMPIO PLACES
+//            this.clearPlaces();
         }
 
 //        Intent i = getIntent();
@@ -151,10 +174,15 @@ public class NavigationActivity extends AppCompatActivity {
 //        Bundle bundle = new Bundle();
 //        bundle.putString("USER_ID", id);
 //        fragmentInicio.setArguments(bundle);
+        Bundle bundle = new Bundle();
+        bundle.putString("USER_ID", user_id);
+//        bundle.putString("USER_ID", "u6X3zFjFVHNM5gTVZkUxUuDMTjM2");
+        fragmentoPerfil.setArguments(bundle);
 
         getSupportFragmentManager()
-                .beginTransaction().
-                replace(R.id.fragmentContainer, fragmentInicio)
+                .beginTransaction()
+                .add(R.id.fragmentContainer, fragmentoPerfil, "profileFragment")
+                .addToBackStack(tag)
                 .commit();
 
     }
@@ -237,7 +265,7 @@ public class NavigationActivity extends AppCompatActivity {
             names[listaLugares.indexOf(p)] = p.getName();
             asd[listaLugares.indexOf(p)] = false;
         }
-//        myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").setValue(null);
+//        myRef.child("usuarios").child(user_id).child("listaLugares").setValue(null);
         listaDeseados = new ArrayList();
         builder.setTitle("CONFIRME SU UBICACION")
                 .setMultiChoiceItems(names, asd, new DialogInterface.OnMultiChoiceClickListener() {
@@ -256,7 +284,7 @@ public class NavigationActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             flagOK = true;
-                            myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").setValue(listaDeseados);
+                            myRef.child("usuarios").child(user_id).child("listaLugares").setValue(listaDeseados);
                             // PROGRAMO VERIFICACION A FUTURO
                             scheduleCheck();
                         } catch (StringIndexOutOfBoundsException exc) {
@@ -264,8 +292,6 @@ public class NavigationActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        //.show();
         Dialog diag = builder.create();
         diag.show();
     }
@@ -287,9 +313,8 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void showValidatedPlaces(){
-        Log.e("ZAFTIENE QUE ENTRAR", "ASD");
-        Log.e("ZAFSIZELISTALUGARES", String.valueOf(listaLugares.size()));
-        myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").addListenerForSingleValueEvent(new ValueEventListener() {
+        Log.e("ZAFSVP1", "ASD");
+        myRef.child("usuarios").child(user_id).child("listaLugares").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                Log.e("ZAFSIZELISTADESEADOS", dataSnapshot.getValue().toString());
@@ -298,21 +323,19 @@ public class NavigationActivity extends AppCompatActivity {
                 for (int i = 0; i < dataSnapshot.getChildrenCount(); i++) {
                     listaDeseados.add(dataSnapshot.child("" + i).getValue());
                 }
-                Log.e("ZAFSIZELISTADESEADOS235", String.valueOf(listaDeseados.size()));
+                Log.e("ZAFSVP2", "ASD");
                 String lista = "";
                 listaLugaresConfirmados = new ArrayList<HashMap<String, String>>();
                 if (listaLugares.isEmpty()) {
-                    Log.e("ZAF IF", "ENTRA 1");
-                    Toast.makeText(NavigationActivity.this, "Ya no se encuentra en ningún sitio solicitaado.\nSu perfil no estará visible en el mismo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NavigationActivity.this, "No posee ningún lugar cercano", Toast.LENGTH_SHORT).show();
+                    listaDeseados.clear();
+//                    Toast.makeText(NavigationActivity.this, "Ya no se encuentra en el/los sitio/s solicitado/s.\nSu perfil no estará visible en el mismo", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e("ZAF IF", ((HashMap<String, String>) listaDeseados.get(0)).get("name"));
                     for (Object o : listaDeseados) {
                         for (int i = 0; i < listaLugares.size(); i++) {
                             if (listaLugares.get(i).getId().equals(((HashMap<String, String>) o).get("id"))) {
-                                Log.e("ZAF IF2", "ENTRA 4");
                                 listaLugaresConfirmados.add(o);
                                 lista = lista + ((HashMap<String, String>) o).get("name") + ", ";
-                                Log.d("ZAFLISTASTR", lista);
                             }
                         }
                     }
@@ -329,29 +352,28 @@ public class NavigationActivity extends AppCompatActivity {
                                                     msg = "ERROR";
                                                 } else {
                                                     //MANDO NOTIFICACION
-                                                    Log.wtf("ZAFMANDONOT", "SUSCRITO");
                                                     sendNotification();
-                                                    Log.wtf("ZAFMANDONOT", "TERMINO SEND");
                                                 }
-                                                Log.d("ZAFRESULT", msg);
     //                                            Toast.makeText(NavigationActivity.this, msg + " A " + ((HashMap<String, String>) listaLugaresConfirmados.get(i)).get("name"), Toast.LENGTH_SHORT).show();
                                             }
                                         });
-                                Log.e("ZAFHABER", ((HashMap<String, String>) listaLugaresConfirmados.get(i)).get("id"));
-                                myRef.child("places").child(((HashMap<String, String>) listaLugaresConfirmados.get(i)).get("id")).push().setValue(mAuth.getCurrentUser().getUid());
+                                myRef.child("places").child(((HashMap<String, String>) listaLugaresConfirmados.get(i)).get("id")).push().setValue(user_id);
                             }
-                            Log.e("ZAF ALMACENA",mAuth.getCurrentUser().getUid());
-                            myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").setValue(listaLugaresConfirmados);
-                            Log.e("ZAF ALMACENO", "done");
+                            myRef.child("usuarios").child(user_id).child("listaLugares").setValue(listaLugaresConfirmados);
                         } catch (Exception e) {
-                            Log.e("ZAFNULL NULL NULL NULL", "NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL NULL");
-                            Log.d("ZAFEXCEPTION", e.getMessage() + " - " + e.getCause().toString());
-                            Log.e("ZAFHABER", ((HashMap<String, String>) listaLugaresConfirmados.get(0)).get("id"));
                             e.printStackTrace();
                         }
                     }else {
-                        myRef.child("usuarios").child(mAuth.getCurrentUser().getUid()).child("listaLugares").removeValue();
+                        myRef.child("usuarios").child(user_id).child("listaLugares").removeValue();
+                        if (cont<1) {
+                            Log.e("ZAFSVP3", "ASD");
+                            listaLugares.clear();
+                            MyAsyncTask mat = new MyAsyncTask(NavigationActivity.this, true);
+                            mat.execute();
+                            cont++;
+                        }
                     }
+                    listaDeseados.clear();
                 }
             }
 
@@ -374,7 +396,7 @@ public class NavigationActivity extends AppCompatActivity {
             objData = new JSONObject();
 
             dataobjData = new JSONObject();
-            dataobjData.put("message", mAuth.getCurrentUser().getUid());
+            dataobjData.put("message", user_id);
             dataobjData.put("is-match", "false");
 
 
@@ -453,11 +475,11 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     public void onResume(){
-        if (listaDeseados!=null && listaDeseados.size()>0 && cont==0) {
-            listaLugares.clear();
-            Log.e("ZAF ANDA ALGO", "sDFDFGDFGDF");
-            this.checkPlaces();
-            cont++;
+//        Log.e("ZAFSONOALARMA10", "entra on resume " +String.valueOf(NavigationActivity.checkBroadcast));
+        if (cont>0 && listaDeseados.size()>0){
+            Log.e("ZAFSONOALARMA10", "entra on resume");
+            navigation.setSelectedItemId(R.id.navigation_get_close);
+            checkPlaces();
         }
         super.onResume();
     }
@@ -470,7 +492,7 @@ public class NavigationActivity extends AppCompatActivity {
                     Log.e("HABERRR", String.valueOf(child.getChildrenCount()));
                     for (DataSnapshot chil : child.getChildren()) {
                         Log.e("HABERRR1", chil.getValue().toString());
-                        if (chil.getValue().toString().equals(mAuth.getCurrentUser().getUid())){
+                        if (chil.getValue().toString().equals(user_id)){
                             chil.getRef().removeValue();
                         }
                     }
@@ -483,69 +505,13 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
     }
-    class MyTask extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            //Toast.makeText(getApplicationContext(), "Bienvenido", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-
-            for (int i=0; i<=15; i++){
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                publishProgress(i);
-            }
-
-            return "Fin";
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-
-            mProgressBar.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Toast.makeText(getApplicationContext(), "Bienvenido", Toast.LENGTH_LONG).show();
-
-            callActivity();
-
-        }
-    }
-
-    public void callActivity(){
-
-
-    }
 
     @Override
     public void onBackPressed(){
-
-        String[] arr = {ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-        do {
-            ActivityCompat.requestPermissions(this, arr, 0);
-        }while(ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED);
-
         //Llamo a la actividad login
         Intent i = new Intent(NavigationActivity.this, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
-
     }
 
 

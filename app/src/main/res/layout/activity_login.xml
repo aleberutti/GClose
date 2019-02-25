@@ -15,8 +15,19 @@ android:background="#303030">
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
-        app:srcCompat="@drawable/logotest" />
+        android:layout_marginTop="180dp"
+        app:srcCompat="@drawable/logotest"/>
+
+    <TextView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/billabong"
+        android:layout_marginTop="390dp"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textSize="80sp"/>
 
 
     <EditText
@@ -25,9 +36,10 @@ android:background="#303030">
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="35dp"
         android:layout_below="@id/imageView"
-        android:hint="@string/hint_email" />
+        android:hint="@string/hint_email"
+        android:visibility="invisible"/>
 
     <EditText
         android:id="@+id/EditPassword"
@@ -38,7 +50,8 @@ android:background="#303030">
         android:layout_below="@id/EditUsername"
         android:layout_marginTop="15dp"
         android:hint="@string/hint_password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/BtLogin"
@@ -52,7 +65,8 @@ android:background="#303030">
         android:paddingTop="15dp"
         android:text="@string/ingresar"
         android:textAlignment="center"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:visibility="invisible"/>
 
 
     <TextView
@@ -63,7 +77,8 @@ android:background="#303030">
         android:layout_below="@id/BtLogin"
         android:layout_marginTop="15dp"
         android:text="@string/tvLogin"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:visibility="invisible"/>
 
 
     <ProgressBar

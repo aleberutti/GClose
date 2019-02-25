@@ -26,6 +26,7 @@ public class MyAsyncTask extends AsyncTask<Void, Void, List<Place>> {
     @Override
     protected void onPreExecute() {
         //--------------------------MOSTRAR PANTALLA DE CARGANDO LUGARES PLEASE------------------------------
+        Log.e("ZAFSONOALARMAFA", "ASDF");
     }
 
 

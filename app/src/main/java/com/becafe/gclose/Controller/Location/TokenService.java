@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.becafe.gclose.MainActivity;
 import com.becafe.gclose.Model.Usuario;
 import com.becafe.gclose.R;
+import com.becafe.gclose.View.LoginActivity;
 import com.becafe.gclose.View.NavigationActivity;
 import com.becafe.gclose.View.ProfileFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +46,7 @@ public class TokenService extends FirebaseMessagingService {
 //                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
 //                .child("messaging-token")
 //                .setValue(token);
+        Log.e("QUIEROVERTOKEN", token);
         Token=token;
     }
     @Override
@@ -63,7 +64,7 @@ public class TokenService extends FirebaseMessagingService {
         Log.e("FAUSTO3", remoteMessage.getData().toString());
         try {
             if (json.getString("is-match").equals("true")) {
-                Intent destino = new Intent(getBaseContext(), MainActivity.class);
+                Intent destino = new Intent(getBaseContext(), LoginActivity.class);
                 destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 createNotificationChannel();
@@ -90,7 +91,7 @@ public class TokenService extends FirebaseMessagingService {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             Usuario emisor = dataSnapshot.getValue(Usuario.class);
-                            Intent destino = new Intent(getBaseContext(), MainActivity.class);
+                            Intent destino = new Intent(getBaseContext(), LoginActivity.class);
                             destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |
                                     Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             createNotificationChannel();

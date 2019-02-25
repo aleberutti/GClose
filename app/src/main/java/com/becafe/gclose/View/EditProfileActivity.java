@@ -45,6 +45,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int GALLERY_INTENT_PERFIL=2;
     private static final int REQUEST_CODE_CROP_IMAGE=3;
     private static final int CAMERA=4;
+    public static boolean changeProfilePic, changePortaitPic, changeGallery;
 
 
     private FirebaseAuth mAuth;
@@ -53,7 +54,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private ProgressBar mProgressBar;
     private boolean flagPerfil;
-    public boolean flagOut;
+    private boolean flagOut;
+    private String hijo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class EditProfileActivity extends AppCompatActivity {
         flagPerfil = false;
 
         mProgressBar = findViewById(R.id.progressbar);
+        changeProfilePic = false;
+        changePortaitPic = false;
 
         work = findViewById(R.id.EditWork);
         studies = findViewById(R.id.EditStudies);
@@ -188,7 +192,7 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        String hijo = "";
+        hijo = "";
         if (flagPerfil) {
             hijo = "foto_perfil";
         }else{
@@ -206,7 +210,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     flagOut = true;
                     Toast.makeText(EditProfileActivity.this, "Se ha actualizado su foto", Toast.LENGTH_SHORT).show();
-                    flagOut = true;
+                    if (hijo.equals("foto_perfil")){
+                        changeProfilePic = true;
+                    }else{
+                        changePortaitPic = true;
+                    }
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
@@ -229,6 +237,11 @@ public class EditProfileActivity extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     flagOut = true;
                     Toast.makeText(EditProfileActivity.this, "Se ha actualizado su foto", Toast.LENGTH_SHORT).show();
+                    if (hijo.equals("foto_perfil")){
+                        changeProfilePic = true;
+                    }else{
+                        changePortaitPic = true;
+                    }
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
@@ -244,7 +257,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, null, null);
         return Uri.parse(path);
     }
